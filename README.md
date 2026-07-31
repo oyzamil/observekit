@@ -9,7 +9,13 @@ scripts with something fast and typed.
 Zero runtime dependencies. ESM + CJS. `sideEffects: false`.
 
 ```bash
+bun add observekit
+```
+```bash
 npm install observekit
+```
+```bash
+pnpm install observekit
 ```
 
 ## Why
