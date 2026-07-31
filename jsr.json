@@ -1,0 +1,8 @@
+{
+	"name": "@oyzamil/observekit",
+	"version": "0.0.1",
+	"exports": "./src/index.ts",
+	"publish": {
+		"include": ["src/**/*.ts", "README.md", "LICENSE", "jsr.json"]
+	}
+}

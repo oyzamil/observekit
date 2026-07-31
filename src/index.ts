@@ -42,7 +42,17 @@ function observekitFn(config: ObserveKitConfig): Disposer {
 	return { disconnect() {} };
 }
 
-export const observekit = Object.assign(observekitFn, {
+export const observekit: typeof observekitFn & {
+	element: typeof element;
+	selector: typeof selector;
+	attribute: typeof attribute;
+	children: typeof children;
+	text: typeof text;
+	resize: typeof resize;
+	visible: typeof visible;
+	performance: typeof performance_;
+	reports: typeof reports;
+} = Object.assign(observekitFn, {
 	element,
 	selector,
 	attribute,
