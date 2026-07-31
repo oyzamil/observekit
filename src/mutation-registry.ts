@@ -2,6 +2,7 @@ import type { Root, TextMatcher } from "./types";
 
 import { collectElements, matchesText } from "./util";
 
+/** Internal registration record for `element()`/`selector()` watchers. */
 export interface ElementWatcher {
 	selector: string;
 	textMatcher?: TextMatcher;
@@ -12,8 +13,10 @@ export interface ElementWatcher {
 	matched: Set<Element>;
 }
 
+/** The kind of change a {@link TargetWatcher} reacts to. */
 export type TargetWatcherKind = "attribute" | "children" | "text";
 
+/** Internal registration record for `attribute()`/`children()`/`text()` watchers. */
 export interface TargetWatcher {
 	kind: TargetWatcherKind;
 	/** For kind === 'attribute': the specific attribute names to react to (empty = all). */
@@ -21,6 +24,7 @@ export interface TargetWatcher {
 	onFire: (els: Element[]) => void;
 }
 
+/** Per-root bookkeeping: the shared native observer plus all registered watchers. */
 interface RootEntry {
 	observer: MutationObserver;
 	elementWatchers: Set<ElementWatcher>;
@@ -29,6 +33,10 @@ interface RootEntry {
 
 const roots = new Map<Root, RootEntry>();
 
+/**
+ * Returns the existing `RootEntry` for `root`, or creates and registers a
+ * new one (including its single native `MutationObserver`) if none exists.
+ */
 function getOrCreateEntry(root: Root): RootEntry {
 	let entry = roots.get(root);
 	if (entry) return entry;
@@ -55,6 +63,7 @@ function getOrCreateEntry(root: Root): RootEntry {
 	return entry;
 }
 
+/** Disconnects and removes a root's native observer once it has no watchers left. */
 function maybeTeardown(root: Root, entry: RootEntry): void {
 	if (entry.elementWatchers.size === 0 && entry.targetWatchers.size === 0) {
 		entry.observer.disconnect();
@@ -62,6 +71,15 @@ function maybeTeardown(root: Root, entry: RootEntry): void {
 	}
 }
 
+/**
+ * Registers a selector-based element watcher against `root`, creating the
+ * root's shared `MutationObserver` on first use.
+ *
+ * @param root - The document/element scope to watch.
+ * @param watcher - The watcher record to register.
+ * @returns An unregister function; safe to call once to remove the watcher
+ * (and tear down the native observer if it was the last one on `root`).
+ */
 export function registerElementWatcher(
 	root: Root,
 	watcher: ElementWatcher,
@@ -74,6 +92,17 @@ export function registerElementWatcher(
 	};
 }
 
+/**
+ * Registers a target-based watcher (attribute/children/text) for a specific
+ * `target` element under `root`, creating the root's shared
+ * `MutationObserver` on first use.
+ *
+ * @param root - The document/element scope to watch.
+ * @param target - The specific element the watcher cares about.
+ * @param watcher - The watcher record to register.
+ * @returns An unregister function; safe to call once to remove the watcher
+ * (and tear down the native observer if it was the last one on `root`).
+ */
 export function registerTargetWatcher(
 	root: Root,
 	target: Element,
@@ -101,6 +130,9 @@ export function registerTargetWatcher(
  * registered selector against that single walk with `matches()`. Cost is
  * O(batch size * selector count) with zero extra querySelectorAll calls per
  * selector and zero extra native observers.
+ *
+ * @param entry - The root entry whose watchers should be dispatched to.
+ * @param mutations - The raw mutation records delivered by the native observer.
  */
 function handleMutations(entry: RootEntry, mutations: MutationRecord[]): void {
 	const hasElementWatchers = entry.elementWatchers.size > 0;
@@ -155,6 +187,11 @@ function handleMutations(entry: RootEntry, mutations: MutationRecord[]): void {
 		dispatchTargetWatchers(entry, attrTargets, childListTargets, textTargets);
 }
 
+/**
+ * Matches added/removed elements and attribute-changed targets against every
+ * registered `ElementWatcher` on `entry`, firing `onAdd`/`onRemove` as
+ * appropriate and keeping each watcher's `matched` set in sync.
+ */
 function dispatchElementWatchers(
 	entry: RootEntry,
 	addedEls: Element[],
@@ -178,8 +215,7 @@ function dispatchElementWatchers(
 			// so removal is decided solely by prior membership in `matched`
 			// (never re-derived from selector/text on the removed node).
 			const matched = removedEls.filter(
-				(el) =>
-					w.matched.has(el) || (!w.textMatcher && el.matches(w.selector)),
+				(el) => w.matched.has(el) || (!w.textMatcher && el.matches(w.selector)),
 			);
 			if (matched.length) {
 				matched.forEach((el) => w.matched.delete(el));
@@ -196,6 +232,10 @@ function dispatchElementWatchers(
 	}
 }
 
+/**
+ * Routes attribute/children/text mutation data to the `TargetWatcher`s
+ * registered for each specific target element on `entry`.
+ */
 function dispatchTargetWatchers(
 	entry: RootEntry,
 	attrTargets: Map<Element, Set<string>>,

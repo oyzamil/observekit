@@ -1,15 +1,30 @@
-import { defineConfig } from 'tsup';
+import { defineConfig, type Options } from "tsup";
 
-export default defineConfig({
-  entry: ['src/index.ts'],
-  format: ['esm', 'cjs'],
-  dts: true,
-  sourcemap: true,
-  clean: true,
-  treeshake: true,
-  minify: false,
-  target: 'es2020',
-  outExtension({ format }) {
-    return { js: format === 'cjs' ? '.cjs' : '.js' };
-  },
-});
+const shared: Options = {
+	entry: ["src/index.ts"],
+	format: ["esm", "cjs"],
+	sourcemap: true,
+	treeshake: true,
+	target: "es2020",
+};
+
+export default defineConfig([
+	{
+		...shared,
+		dts: true,
+		clean: true,
+		minify: false,
+		outExtension({ format }) {
+			return { js: format === "cjs" ? ".cjs" : ".js" };
+		},
+	},
+	{
+		...shared,
+		dts: false,
+		clean: false,
+		minify: true,
+		outExtension({ format }) {
+			return { js: format === "cjs" ? ".min.cjs" : ".min.js" };
+		},
+	},
+]);

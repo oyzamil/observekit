@@ -2,11 +2,19 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { observekit } from "../src/index";
 
+/** Sleeps one tick to let a mutation batch flush and dispatch. */
 function flush() {
 	return new Promise((r) => setTimeout(r, 0));
 }
 
+/**
+ * Test suite for the shared-observer multiplexing internals: a single
+ * native `MutationObserver` per root serving many watchers, batched
+ * single-callback dispatch for simultaneous DOM changes, and
+ * JS-side `matches()` scoping instead of per-selector `querySelectorAll`.
+ */
 describe("shared observer multiplexing", () => {
+	/** Disposers collected per-test, disconnected in `afterEach`. */
 	const disposers: Array<{ disconnect(): void }> = [];
 	afterEach(async () => {
 		disposers.splice(0).forEach((d) => d.disconnect());
@@ -14,9 +22,16 @@ describe("shared observer multiplexing", () => {
 		await flush();
 	});
 
+	/**
+	 * Verifies that registering `element`, `selector`, `attribute`, and
+	 * `children` watchers against the same root results in only one
+	 * native `MutationObserver` instance being constructed.
+	 */
 	it("uses a single native MutationObserver for multiple selector/element/attribute/children/text watchers on the same root", async () => {
 		const OriginalMutationObserver = globalThis.MutationObserver;
 		let instanceCount = 0;
+
+		/** Counts every real `MutationObserver` construction. */
 		class CountingMutationObserver extends OriginalMutationObserver {
 			constructor(cb: MutationCallback) {
 				super(cb);
@@ -47,6 +62,11 @@ describe("shared observer multiplexing", () => {
 		globalThis.MutationObserver = OriginalMutationObserver;
 	});
 
+	/**
+	 * Verifies N simultaneous DOM insertions delivered in a single
+	 * native mutation record batch result in exactly one callback
+	 * invocation carrying all N matched elements.
+	 */
 	it("dispatches a single callback invocation for N simultaneous DOM changes (batch dispatch)", async () => {
 		const cb = vi.fn();
 		disposers.push(observekit.element(".item", cb, { existing: false }));
@@ -65,6 +85,12 @@ describe("shared observer multiplexing", () => {
 		expect(cb.mock.calls[0]![0]).toHaveLength(5);
 	});
 
+	/**
+	 * Verifies selector matching for an added subtree is done via a
+	 * single `querySelectorAll` walk plus per-selector `matches()`
+	 * checks, rather than one `querySelectorAll` call per registered
+	 * selector.
+	 */
 	it("scopes selector matching to the JS-side matches() walk without extra querySelectorAll per selector", async () => {
 		const qsaSpy = vi.spyOn(Element.prototype, "querySelectorAll");
 		const matchesSpy = vi.spyOn(Element.prototype, "matches");

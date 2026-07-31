@@ -1,6 +1,6 @@
 {
 	"name": "observekit",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"description": "Unified, tree-shakeable wrapper over MutationObserver, ResizeObserver, IntersectionObserver, PerformanceObserver and ReportingObserver. A typed, zero-dependency replacement for arrive.js-style polling hacks.",
 	"type": "module",
 	"sideEffects": false,

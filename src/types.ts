@@ -1,6 +1,9 @@
+/** A DOM scope that a watcher can be attached to. */
 export type Root = Document | Element;
 
+/** Handle returned by every `observekit.*` watcher, used to tear it down. */
 export interface Disposer {
+	/** Stops the watcher and releases any underlying native observers. */
 	disconnect(): void;
 }
 
@@ -44,6 +47,10 @@ export interface ElementOptions extends BaseOptions {
 	text?: TextMatcher;
 }
 
+/**
+ * Callback invoked with a batch of matched/changed items.
+ * @typeParam T - The item type delivered per batch. Defaults to `Element`.
+ */
 export type ElementsCallback<T = Element> = (elements: T[]) => void;
 
 /**
@@ -53,9 +60,16 @@ export type ElementsCallback<T = Element> = (elements: T[]) => void;
  */
 export type TextMatcher = string | RegExp | ((text: string) => boolean);
 
+/** Split add/remove callback pair, as accepted by {@link element}'s `callback` param. */
 export interface AddRemoveCallbacks {
+	/** Called with elements newly matching the selector. */
 	add?: ElementsCallback;
+	/** Called with elements that previously matched but no longer do (e.g. removed from the DOM). */
 	remove?: ElementsCallback;
 }
 
+/**
+ * Callback shape accepted by `element()`/`selector()`: either a single
+ * function (treated as `onAdd`) or an explicit `{ add, remove }` pair.
+ */
 export type ElementCallback = ElementsCallback | AddRemoveCallbacks;

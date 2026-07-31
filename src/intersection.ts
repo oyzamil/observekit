@@ -2,6 +2,7 @@ import type { BaseOptions, Disposer, ElementsCallback } from "./types";
 
 import { createBatcher, createLifecycle, toArray } from "./util";
 
+/** Options for `visible()`, layered on top of `IntersectionObserver` init options. */
 export interface VisibleOptions extends BaseOptions {
 	root?: Element | Document | null;
 	rootMargin?: string;
@@ -19,6 +20,14 @@ export interface VisibleOptions extends BaseOptions {
 /**
  * One IntersectionObserver per call, `.observe()` invoked once per target -
  * O(1) native observers regardless of how many targets are passed.
+ *
+ * @param targets - A single element or array of elements to observe.
+ * @param callback - Invoked with the batch of `IntersectionObserverEntry`
+ * records delivered by the native observer.
+ * @param options - `VisibleOptions`, including `root`, `rootMargin`,
+ * `threshold`, `offset`, plus the shared base options.
+ * @returns A `Disposer`; call `.disconnect()` to stop observing. Resolves
+ * to a no-op disposer in environments without `IntersectionObserver`.
  */
 export function visible(
 	targets: Element | Element[],

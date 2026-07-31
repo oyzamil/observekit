@@ -8,6 +8,10 @@ import type {
 import { registerElementWatcher } from "./mutation-registry";
 import { createBatcher, createLifecycle, matchesText } from "./util";
 
+/**
+ * Normalizes the `ElementCallback` union into an explicit `onAdd`/`onRemove`
+ * pair. A plain function is treated as `onAdd` only.
+ */
 function normalizeCallback(cb: ElementCallback): {
 	onAdd?: ElementsCallback;
 	onRemove?: ElementsCallback;
@@ -16,6 +20,18 @@ function normalizeCallback(cb: ElementCallback): {
 	return { onAdd: cb.add, onRemove: cb.remove };
 }
 
+/**
+ * Watches `root` (default `document`) for elements matching `selector`
+ * being added to or removed from the DOM, arrive.js-style. Also available
+ * as the `selector()` alias.
+ *
+ * @param selector - CSS selector to match against added/removed elements.
+ * @param callback - Either a single function (treated as the "add"
+ * callback) or a `{ add, remove }` pair.
+ * @param options - Element watcher options, including `root`, `existing`,
+ * `text`, and `fireOnAttributesModification`, plus the shared base options.
+ * @returns A `Disposer`; call `.disconnect()` to stop watching.
+ */
 export function element(
 	selector: string,
 	callback: ElementCallback,

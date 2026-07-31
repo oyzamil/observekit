@@ -87,8 +87,24 @@ batch**, never one call per item.
 | `root` | `Element \| Document` | `document` | Scope to observe. |
 | `existing` | `boolean` | `true` | Fire immediately for elements already matching on registration. |
 | `fireOnAttributesModification` | `boolean` | `false` | Re-fire for a matched element when its attributes change, not just on insertion. |
+| `text` | `string \| RegExp \| (text: string) => boolean` | — | Match by normalized (trimmed) `textContent`. String = exact match, RegExp = `.test()`, function = predicate. |
 
 ## Examples
+
+Every method also accepts the shared `BaseOptions` below — shown once here
+instead of repeating it in each function's example.
+
+```ts
+// common to every observekit.* watcher (BaseOptions) — mix into any call below
+{
+  signal: controller.signal,  // AbortSignal to disconnect on, default: undefined
+  once: false,                // auto-disconnect after first delivered batch, default: false
+  debounce: 150,              // ms, coalesce rapid fires into one batch, default: undefined (no debounce)
+  timeout: 5000,              // ms, auto-disconnect if nothing has matched yet, default: undefined (no timeout)
+  onConnect: () => {},        // called synchronously once registered
+  onDisconnect: () => {},     // called once, on any disconnect (manual, once, timeout, or abort)
+}
+```
 
 ### `element` / `selector` — arrive.js-style
 
@@ -102,6 +118,31 @@ observekit.selector('.card', {
   add: (cards) => cards.forEach((c) => c.classList.add('mounted')),
   remove: (cards) => cards.forEach((c) => console.log('unmounted', c)),
 });
+
+// match by text — string (exact), RegExp, or predicate
+observekit.element('button', (els) => els.forEach(archiveRow), {
+  text: 'Archive',
+});
+observekit.element('span', (els) => els.forEach(flag), { text: /^Archive/ });
+observekit.element('span', (els) => els.forEach(flag), {
+  text: (t) => t.startsWith('Arch'),
+});
+```
+
+> **Gotcha:** with the two-callback `{ add, remove }` form, `remove` fires
+> based on the element's *prior recorded match* at removal time — not by
+> re-testing `text` again. A removed node's `textContent` may already be
+> gone/changed by the time removal is processed, so re-deriving would be
+> unreliable.
+
+```ts
+// element/selector-specific options, for reference (+ BaseOptions above)
+observekit.element('.card', (els) => { /* ... */ }, {
+  root: document.querySelector('#app')!,  // Element | Document to observe, default: document
+  existing: true,                         // fire immediately for elements already matching, default: true
+  fireOnAttributesModification: false,    // re-fire when a matched element's attributes change, default: false
+  text: 'Archive',                        // string | RegExp | (text: string) => boolean, default: undefined (no text filter)
+});
 ```
 
 ### `attribute`
@@ -112,6 +153,9 @@ observekit.attribute(themeToggleEl, ['data-theme'], (els) => {
 });
 ```
 
+`attribute` takes no options beyond `BaseOptions` (shown once at the top of
+this section).
+
 ### `children`
 
 ```ts
@@ -119,6 +163,9 @@ observekit.children(document.querySelector('#feed')!, (changed) => {
   console.log(`${changed.length} feed items changed`);
 });
 ```
+
+`children` takes no options beyond `BaseOptions` (shown once at the top of
+this section).
 
 ### `text`
 
@@ -128,11 +175,24 @@ observekit.text(document.querySelector('#counter')!, (els) => {
 });
 ```
 
+`text` takes no options beyond `BaseOptions` (shown once at the top of this
+section) — `debounce: 300` is a typical value for typing, as in the Quick
+start-style example above.
+
 ### `resize`
 
 ```ts
 observekit.resize([sidebar, main], (entries) => {
   entries.forEach((e) => console.log(e.target, e.contentRect.width));
+});
+```
+
+```ts
+// resize-specific options, for reference (+ BaseOptions above)
+observekit.resize([sidebar, main], (entries) => { /* ... */ }, {
+  onStart: (entries) => console.log('resize gesture started', entries),  // fires once when a resize gesture begins, default: undefined
+  onEnd: (entries) => console.log('resize gesture ended', entries),      // fires once when a resize gesture ends, default: undefined
+  idle: 200,  // ms of silence before a gesture counts as ended, default: 200
 });
 ```
 
@@ -144,11 +204,28 @@ observekit.visible(images, (entries) => {
 }, { threshold: 0.1 });
 ```
 
+```ts
+// visible-specific options, for reference (+ BaseOptions above)
+observekit.visible(images, (entries) => { /* ... */ }, {
+  root: document.querySelector('#scroller'),  // Element | Document | null, viewport if null/omitted, default: null
+  rootMargin: '0px',  // CSS margin syntax, expands/shrinks root box, default: '0px'
+  threshold: 0.1,      // number | number[], visible ratio(s) that trigger a callback, default: 0
+  offset: 100,          // number (px) | string shorthand for rootMargin, ignored if rootMargin is also set, default: undefined
+});
+```
+
 ### `performance`
 
 ```ts
 observekit.performance(['largest-contentful-paint'], (entries) => {
   console.log('LCP', entries.at(-1)?.startTime);
+});
+```
+
+```ts
+// performance-specific options, for reference (+ BaseOptions above)
+observekit.performance(['largest-contentful-paint'], (entries) => { /* ... */ }, {
+  buffered: true,  // include entries recorded before this observer was created, default: true
 });
 ```
 
@@ -159,6 +236,9 @@ observekit.reports(['deprecation', 'intervention'], (reports) => {
   reports.forEach((r) => console.warn(r.type, r.body));
 });
 ```
+
+`reports` takes no options beyond `BaseOptions` (shown once at the top of
+this section).
 
 ### Options
 
@@ -208,7 +288,7 @@ observekit.selector('.modal', (els) => els.forEach(openModal), {
 
 - [`docs/API.md`](docs/API.md) — using observekit.
 - [`docs/jquery.md`](docs/jquery.md) — using observekit with jQuery collections.
-- [`example/index.html`](example/index.html) — live demo of every method, each with a Replay button. Run `npm run build` then open the file (imports from `../dist/index.js`).
+- [`example/index.html`](example/index.html) — live demo of every method, each with a Replay button.
 
 ## Non-goals
 

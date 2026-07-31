@@ -22,6 +22,11 @@ export type {
 	TextMatcher,
 } from "./types";
 
+/**
+ * Declarative config accepted by the `observekit(config)` call form. Each
+ * key is a no-arg setup function the caller provides; ObserveKit simply
+ * invokes whichever ones are present.
+ */
 export interface ObserveKitConfig {
 	mutation?: () => void;
 	resize?: () => void;
@@ -33,6 +38,9 @@ export interface ObserveKitConfig {
  * Calling `observekit({...})` is a no-op convenience form for consumers who
  * want a single declarative entry point; prefer the named, tree-shakeable
  * `observekit.*` methods below for real usage.
+ *
+ * @param config - Setup functions to invoke for each requested observer kind.
+ * @returns A `Disposer` whose `disconnect()` is a no-op.
  */
 function observekitFn(config: ObserveKitConfig): Disposer {
 	config.mutation?.();
@@ -42,6 +50,12 @@ function observekitFn(config: ObserveKitConfig): Disposer {
 	return { disconnect() {} };
 }
 
+/**
+ * ObserveKit's default export: a callable convenience form
+ * (`observekit(config)`) also exposing every named watcher as a method
+ * (`observekit.element`, `observekit.resize`, etc.) for tree-shakeable,
+ * direct usage.
+ */
 export const observekit: typeof observekitFn & {
 	element: typeof element;
 	selector: typeof selector;

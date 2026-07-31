@@ -2,10 +2,23 @@ import type { BaseOptions, Disposer, ElementsCallback } from "./types";
 
 import { createBatcher, createLifecycle } from "./util";
 
+/** Options for `performance_()`, layered on top of `PerformanceObserver` init options. */
 export interface PerformanceOptions extends BaseOptions {
+	/** Include performance entries recorded before this observer was created. Defaults to `true`. */
 	buffered?: boolean;
 }
 
+/**
+ * Wraps `PerformanceObserver`, batching `PerformanceEntry` records for the
+ * given `entryTypes`.
+ *
+ * @param entryTypes - Entry types to observe (e.g. `["largest-contentful-paint"]`).
+ * @param callback - Invoked with each batch of `PerformanceEntry` records.
+ * @param options - `PerformanceOptions`, including `buffered`, plus the
+ * shared base options.
+ * @returns A `Disposer`; call `.disconnect()` to stop observing. Resolves
+ * to a no-op disposer in environments without `PerformanceObserver`.
+ */
 export function performance_(
 	entryTypes: string[],
 	callback: ElementsCallback<PerformanceEntry>,

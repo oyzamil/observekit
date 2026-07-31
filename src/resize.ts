@@ -2,6 +2,7 @@ import type { BaseOptions, Disposer, ElementsCallback } from "./types";
 
 import { createBatcher, createLifecycle, toArray } from "./util";
 
+/** Options for `resize()`, adding resize-gesture start/end tracking on top of the base options. */
 export interface ResizeOptions extends BaseOptions {
 	/** Fires once when a resize gesture begins (first entries after idle). */
 	onStart?: ElementsCallback<ResizeObserverEntry>;
@@ -14,6 +15,14 @@ export interface ResizeOptions extends BaseOptions {
 /**
  * One ResizeObserver per call, `.observe()` invoked once per target -
  * O(1) native observers regardless of how many targets are passed.
+ *
+ * @param targets - A single element or array of elements to observe.
+ * @param callback - Invoked with every batch of `ResizeObserverEntry`
+ * records delivered by the native observer.
+ * @param options - `ResizeOptions`, including `onStart`, `onEnd`, `idle`,
+ * plus the shared base options.
+ * @returns A `Disposer`; call `.disconnect()` to stop observing. Resolves
+ * to a no-op disposer in environments without `ResizeObserver`.
  */
 export function resize(
 	targets: Element | Element[],
@@ -72,7 +81,15 @@ export function resize(
 	};
 }
 
-/** Sugar: only care about resize gesture start. */
+/**
+ * Sugar: only care about resize gesture start.
+ *
+ * @param targets - A single element or array of elements to observe.
+ * @param callback - Invoked once per resize gesture, with the entries that
+ * triggered it.
+ * @param options - Same options as `resize()`; `onStart` is set internally.
+ * @returns A `Disposer`; call `.disconnect()` to stop observing.
+ */
 resize.start = function start(
 	targets: Element | Element[],
 	callback: ElementsCallback<ResizeObserverEntry>,
@@ -81,7 +98,15 @@ resize.start = function start(
 	return resize(targets, () => {}, { ...options, onStart: callback });
 };
 
-/** Sugar: only care about resize gesture end. */
+/**
+ * Sugar: only care about resize gesture end.
+ *
+ * @param targets - A single element or array of elements to observe.
+ * @param callback - Invoked once per resize gesture, with the last-known
+ * entries for each target once the gesture goes idle.
+ * @param options - Same options as `resize()`; `onEnd` is set internally.
+ * @returns A `Disposer`; call `.disconnect()` to stop observing.
+ */
 resize.end = function end(
 	targets: Element | Element[],
 	callback: ElementsCallback<ResizeObserverEntry>,
