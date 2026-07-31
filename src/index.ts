@@ -19,6 +19,7 @@ export type {
 	ElementOptions,
 	ElementsCallback,
 	Root,
+	TextMatcher,
 } from "./types";
 
 export interface ObserveKitConfig {

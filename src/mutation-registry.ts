@@ -1,9 +1,10 @@
-import type { Root } from "./types";
+import type { Root, TextMatcher } from "./types";
 
-import { collectElements } from "./util";
+import { collectElements, matchesText } from "./util";
 
 export interface ElementWatcher {
 	selector: string;
+	textMatcher?: TextMatcher;
 	fireOnAttributesModification: boolean;
 	onAdd?: (els: Element[]) => void;
 	onRemove?: (els: Element[]) => void;
@@ -162,15 +163,23 @@ function dispatchElementWatchers(
 ): void {
 	for (const w of entry.elementWatchers) {
 		if (addedEls.length && w.onAdd) {
-			const matched = addedEls.filter((el) => el.matches(w.selector));
+			let matched = addedEls.filter((el) => el.matches(w.selector));
+			if (w.textMatcher) {
+				const tm = w.textMatcher;
+				matched = matched.filter((el) => matchesText(el, tm));
+			}
 			if (matched.length) {
 				matched.forEach((el) => w.matched.add(el));
 				w.onAdd(matched);
 			}
 		}
 		if (removedEls.length && w.onRemove) {
+			// With a textMatcher, an element's text is unreliable once detached,
+			// so removal is decided solely by prior membership in `matched`
+			// (never re-derived from selector/text on the removed node).
 			const matched = removedEls.filter(
-				(el) => w.matched.has(el) || el.matches(w.selector),
+				(el) =>
+					w.matched.has(el) || (!w.textMatcher && el.matches(w.selector)),
 			);
 			if (matched.length) {
 				matched.forEach((el) => w.matched.delete(el));

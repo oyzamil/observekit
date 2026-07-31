@@ -1,4 +1,22 @@
-import type { BaseOptions, Disposer } from "./types";
+import type { BaseOptions, Disposer, TextMatcher } from "./types";
+
+/** Collapse whitespace and trim, so markup formatting doesn't affect matches. */
+function normalizeText(s: string): string {
+	return s.replace(/\s+/g, " ").trim();
+}
+
+/**
+ * Tests an element's textContent against a TextMatcher. Deliberately uses
+ * `textContent` rather than `innerText` — `innerText` forces a synchronous
+ * layout, which is disastrous when called per-element on every mutation
+ * batch. `textContent` is a plain tree read.
+ */
+export function matchesText(el: Element, matcher: TextMatcher): boolean {
+	const text = normalizeText(el.textContent ?? "");
+	if (typeof matcher === "string") return text === matcher;
+	if (matcher instanceof RegExp) return matcher.test(text);
+	return matcher(text);
+}
 
 /**
  * Batch-level debouncer: one timer for the whole watcher, not one per

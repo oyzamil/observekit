@@ -6,174 +6,348 @@
   <title>observekit — live demos</title>
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: { colors: { accent: '#7fd3ff', warn: '#ffb454' } } },
+    };
+  </script>
 </head>
 
-<body class="font-mono bg-[#0f1115] text-[#e6e6e6] p-8">
+<body class="dark bg-slate-950 text-slate-100 font-mono p-8">
 
-  <h1 class="text-xl font-semibold mb-1">observekit — live demos</h1>
-  <p class="text-[#9aa] mt-0">Every method below is wired to a real observekit watcher. Trigger the action, watch the
-    log, hit Replay
-    to reset and re-register.</p>
+  <div class="max-w-6xl mx-auto">
 
-  <section id="demo-element" class="border border-[#2a2e37] rounded-lg p-4 my-5 bg-[#161a22]">
-    <h2 class="text-[#7fd3ff] text-base mb-2">observekit.element / selector</h2>
-    <div class="flex gap-2 flex-wrap my-2">
-      <button id="el-add" class="bg-[#232838] border border-[#333a4d] rounded-md px-3 py-1.5 hover:bg-[#2c3346]">Add
-        matching element (.demo-item)</button>
-      <button id="el-remove"
-        class="bg-[#232838] border border-[#333a4d] rounded-md px-3 py-1.5 hover:bg-[#2c3346]">Remove last</button>
-      <button id="el-replay"
-        class="bg-[#232838] border border-[#ffb454] text-[#ffb454] rounded-md px-3 py-1.5 hover:bg-[#2c3346]">Replay
-        demo</button>
-    </div>
-    <div class="border border-dashed border-[#333a4d] rounded-md p-3 my-2 min-h-[2rem]" id="el-stage"></div>
-    <pre class="bg-[#0b0d12] rounded-md p-2 max-h-[140px] overflow-y-auto text-[13px] mt-2 whitespace-pre-wrap"
-      id="el-log"></pre>
-  </section>
+    <h1 class="text-2xl font-bold mb-1">observekit — live demos</h1>
+    <p class="text-slate-400 mb-8 max-w-3xl">Every method below is wired to a real observekit watcher. Trigger the
+      action, watch the log, hit Replay to reset and re-register. Each card also shows the exact call you'd write to
+      use that function yourself.</p>
 
-  <section id="demo-attribute" class="border border-[#2a2e37] rounded-lg p-4 my-5 bg-[#161a22]">
-    <h2 class="text-[#7fd3ff] text-base mb-2">observekit.attribute</h2>
-    <p class="text-xs text-[#8a8] mb-1">click target below directly — watcher fires on its data-state attribute</p>
-    <div class="flex gap-2 flex-wrap my-2">
-      <button id="attr-replay"
-        class="bg-[#232838] border border-[#ffb454] text-[#ffb454] rounded-md px-3 py-1.5 hover:bg-[#2c3346]">Replay
-        demo</button>
-    </div>
-    <div class="border border-dashed border-[#333a4d] rounded-md p-3 my-2 min-h-[2rem]">
-      <div
-        class="w-20 h-[60px] flex items-center justify-center bg-[#3a2b52] rounded-md cursor-pointer select-none text-center text-sm px-2"
-        id="attr-target">click me</div>
-    </div>
-    <pre class="bg-[#0b0d12] rounded-md p-2 max-h-[140px] overflow-y-auto text-[13px] mt-2 whitespace-pre-wrap"
-      id="attr-log"></pre>
-  </section>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-  <section id="demo-children" class="border border-[#2a2e37] rounded-lg p-4 my-5 bg-[#161a22]">
-    <h2 class="text-[#7fd3ff] text-base mb-2">observekit.children</h2>
-    <div class="flex gap-2 flex-wrap my-2">
-      <button id="child-add" class="bg-[#232838] border border-[#333a4d] rounded-md px-3 py-1.5 hover:bg-[#2c3346]">Add
-        list item</button>
-      <button id="child-remove"
-        class="bg-[#232838] border border-[#333a4d] rounded-md px-3 py-1.5 hover:bg-[#2c3346]">Remove list item</button>
-      <button id="child-replay"
-        class="bg-[#232838] border border-[#ffb454] text-[#ffb454] rounded-md px-3 py-1.5 hover:bg-[#2c3346]">Replay
-        demo</button>
-    </div>
-    <ul class="border border-dashed border-[#333a4d] rounded-md p-3 my-2 min-h-[2rem] list-disc list-inside"
-      id="child-list"></ul>
-    <pre class="bg-[#0b0d12] rounded-md p-2 max-h-[140px] overflow-y-auto text-[13px] mt-2 whitespace-pre-wrap"
-      id="child-log"></pre>
-  </section>
+      <section id="demo-element" class="border border-slate-800 rounded-lg p-5 bg-slate-900 flex flex-col">
+        <h2 class="text-accent font-semibold mb-2">observekit.element / selector</h2>
+        <div class="flex flex-wrap gap-2 mb-2">
+          <button id="el-add" class="px-3 py-1.5 rounded-md bg-slate-800 border border-slate-700 hover:bg-slate-700">Add
+            matching element (.demo-item)</button>
+          <button id="el-remove"
+            class="px-3 py-1.5 rounded-md bg-slate-800 border border-slate-700 hover:bg-slate-700">Remove last</button>
+          <button id="el-replay" class="px-3 py-1.5 rounded-md border border-warn text-warn hover:bg-warn/10">Replay
+            demo</button>
+        </div>
+        <div class="border border-dashed border-slate-700 rounded-md p-3 min-h-[2rem]" id="el-stage"></div>
+        <pre class="log bg-slate-950 rounded-md p-2 mt-2 max-h-36 overflow-y-auto text-xs whitespace-pre-wrap"
+          id="el-log"></pre>
+        <div class="mt-3 pt-3 border-t border-slate-800">
+          <p class="text-slate-500 text-[11px] uppercase tracking-wide mb-1">Usage</p>
+          <pre class="code-block bg-slate-950 border border-slate-800 rounded-md p-3 text-xs overflow-x-auto"><code>const watcher = observekit.selector('.demo-item', {
+  add: (els) =&gt; console.log('added', els),
+  remove: (els) =&gt; console.log('removed', els),
+}, { existing: false });
 
-  <section id="demo-text" class="border border-[#2a2e37] rounded-lg p-4 my-5 bg-[#161a22]">
-    <h2 class="text-[#7fd3ff] text-base mb-2">observekit.text</h2>
-    <div class="flex gap-2 flex-wrap my-2">
-      <button id="text-change"
-        class="bg-[#232838] border border-[#333a4d] rounded-md px-3 py-1.5 hover:bg-[#2c3346]">Change text
-        content</button>
-      <button id="text-replay"
-        class="bg-[#232838] border border-[#ffb454] text-[#ffb454] rounded-md px-3 py-1.5 hover:bg-[#2c3346]">Replay
-        demo</button>
-    </div>
-    <div class="border border-dashed border-[#333a4d] bg-[#3a2b52] rounded-md p-2 my-2" id="text-target">initial text
-    </div>
-    <textarea id="text-input" rows="2" placeholder="type here — debounced, target updates after you pause"
-      class="w-full mt-2 bg-[#0b0d12] border border-[#333a4d] rounded-md p-2 text-[#e6e6e6] text-sm"></textarea>
-    <p class="text-xs text-[#8a8] mt-1">watcher uses <code>debounce: 300</code> — good fit for typing: fires once per
-      pause instead of once per keystroke.</p>
-    <pre class="bg-[#0b0d12] rounded-md p-2 max-h-[140px] overflow-y-auto text-[13px] mt-2 whitespace-pre-wrap"
-      id="text-log"></pre>
-  </section>
+// later, to stop watching:
+watcher.disconnect();</code></pre>
+        </div>
+      </section>
 
-  <section id="demo-resize" class="border border-[#2a2e37] rounded-lg p-4 my-5 bg-[#161a22]">
-    <h2 class="text-[#7fd3ff] text-base mb-2">observekit.resize</h2>
-    <div class="flex gap-2 flex-wrap my-2">
-      <button id="resize-toggle"
-        class="bg-[#232838] border border-[#333a4d] rounded-md px-3 py-1.5 hover:bg-[#2c3346]">Toggle box size</button>
-      <button id="resize-replay"
-        class="bg-[#232838] border border-[#ffb454] text-[#ffb454] rounded-md px-3 py-1.5 hover:bg-[#2c3346]">Replay
-        demo</button>
-    </div>
-    <p class="text-xs text-[#8a8]">drag bottom-right corner of box to resize manually — logs "resize start" then "resize
-      end" after 400ms idle</p>
-    <div class="border border-dashed border-[#333a4d] rounded-md p-3 my-2 min-h-[2rem]">
-      <div
-        class="w-20 h-[60px] bg-[#35405a] rounded-md transition-all duration-300 resize overflow-auto min-w-[60px] min-h-[40px] max-w-[400px] max-h-[300px]"
-        id="resize-target"></div>
-    </div>
-    <pre class="bg-[#0b0d12] rounded-md p-2 max-h-[140px] overflow-y-auto text-[13px] mt-2 whitespace-pre-wrap"
-      id="resize-log"></pre>
-  </section>
+      <section id="demo-element-text" class="border border-slate-800 rounded-lg p-5 bg-slate-900 flex flex-col">
+        <h2 class="text-accent font-semibold mb-2">observekit.element — matched by text</h2>
+        <p class="text-slate-400 text-sm mb-2">watcher is scoped to <code>button</code> +
+          <code>{ text: 'Archive' }</code>
+          — only a button whose text is exactly "Archive" fires, the "Delete" button never does</p>
+        <div class="flex flex-wrap gap-2 mb-2">
+          <button id="eltxt-add-match"
+            class="px-3 py-1.5 rounded-md bg-slate-800 border border-slate-700 hover:bg-slate-700">Add
+            &lt;button&gt;Archive&lt;/button&gt;</button>
+          <button id="eltxt-add-nomatch"
+            class="px-3 py-1.5 rounded-md bg-slate-800 border border-slate-700 hover:bg-slate-700">Add
+            &lt;button&gt;Delete&lt;/button&gt;</button>
+          <button id="eltxt-remove"
+            class="px-3 py-1.5 rounded-md bg-slate-800 border border-slate-700 hover:bg-slate-700">Remove
+            last</button>
+          <button id="eltxt-replay" class="px-3 py-1.5 rounded-md border border-warn text-warn hover:bg-warn/10">Replay
+            demo</button>
+        </div>
+        <div class="border border-dashed border-slate-700 rounded-md p-3 min-h-[2rem] flex gap-2" id="eltxt-stage">
+        </div>
+        <pre class="log bg-slate-950 rounded-md p-2 mt-2 max-h-36 overflow-y-auto text-xs whitespace-pre-wrap"
+          id="eltxt-log"></pre>
+        <div class="mt-3 pt-3 border-t border-slate-800">
+          <p class="text-slate-500 text-[11px] uppercase tracking-wide mb-1">Usage</p>
+          <pre class="code-block bg-slate-950 border border-slate-800 rounded-md p-3 text-xs overflow-x-auto"><code>const watcher = observekit.element('button', {
+  add: (els) =&gt; els.forEach((el) =&gt; console.log('matched', el.textContent)),
+  remove: (els) =&gt; console.log('removed', els.length),
+}, { text: 'Archive', existing: false });
 
-  <section id="demo-visible" class="border border-[#2a2e37] rounded-lg p-4 my-5 bg-[#161a22]">
-    <h2 class="text-[#7fd3ff] text-base mb-2">observekit.visible</h2>
-    <div class="flex gap-2 flex-wrap my-2 items-center">
-      <button id="visible-scroll"
-        class="bg-[#232838] border border-[#333a4d] rounded-md px-3 py-1.5 hover:bg-[#2c3346]">Scroll target into
-        view</button>
-      <label class="text-xs text-[#8a8] flex items-center gap-1">rootMargin offset:
-        <input id="visible-offset" type="number" value="0" step="10"
-          class="w-16 bg-[#0b0d12] border border-[#333a4d] rounded px-1 text-[#e6e6e6]"> px
-      </label>
-      <button id="visible-replay"
-        class="bg-[#232838] border border-[#ffb454] text-[#ffb454] rounded-md px-3 py-1.5 hover:bg-[#2c3346]">Replay
-        demo</button>
-    </div>
-    <div class="h-[120px] overflow-y-scroll border border-dashed border-[#333a4d] p-2" id="visible-scroller">
-      <div class="h-[300px]"></div>
-      <div class="bg-[#3a2b52] p-2 rounded-md" id="visible-target">watched element</div>
-      <div class="h-[300px]"></div>
-    </div>
-    <pre class="bg-[#0b0d12] rounded-md p-2 max-h-[140px] overflow-y-auto text-[13px] mt-2 whitespace-pre-wrap"
-      id="visible-log"></pre>
-  </section>
+watcher.disconnect();</code></pre>
+        </div>
+      </section>
 
-  <section id="demo-performance" class="border border-[#2a2e37] rounded-lg p-4 my-5 bg-[#161a22]">
-    <h2 class="text-[#7fd3ff] text-base mb-2">observekit.performance</h2>
-    <div class="flex gap-2 flex-wrap my-2">
-      <button id="perf-mark" class="bg-[#232838] border border-[#333a4d] rounded-md px-3 py-1.5 hover:bg-[#2c3346]">Run
-        measured task</button>
-      <button id="perf-replay"
-        class="bg-[#232838] border border-[#ffb454] text-[#ffb454] rounded-md px-3 py-1.5 hover:bg-[#2c3346]">Replay
-        demo</button>
-    </div>
-    <pre class="bg-[#0b0d12] rounded-md p-2 max-h-[140px] overflow-y-auto text-[13px] mt-2 whitespace-pre-wrap"
-      id="perf-log"></pre>
-  </section>
+      <section id="demo-attribute" class="border border-slate-800 rounded-lg p-5 bg-slate-900 flex flex-col">
+        <h2 class="text-accent font-semibold mb-2">observekit.attribute</h2>
+        <p class="text-slate-400 text-sm mb-2">click the box itself — toggles data-state directly on click, no separate
+          button</p>
+        <div class="border border-dashed border-slate-700 rounded-md p-3">
+          <div id="attr-target"
+            class="w-24 h-16 bg-purple-900 rounded-md flex items-center justify-center cursor-pointer select-none hover:brightness-125"
+            data-state="idle">click me</div>
+        </div>
+        <pre class="log bg-slate-950 rounded-md p-2 mt-2 max-h-36 overflow-y-auto text-xs whitespace-pre-wrap"
+          id="attr-log"></pre>
+        <div class="mt-2">
+          <button id="attr-replay" class="px-3 py-1.5 rounded-md border border-warn text-warn hover:bg-warn/10">Replay
+            demo</button>
+        </div>
+        <div class="mt-3 pt-3 border-t border-slate-800">
+          <p class="text-slate-500 text-[11px] uppercase tracking-wide mb-1">Usage</p>
+          <pre class="code-block bg-slate-950 border border-slate-800 rounded-md p-3 text-xs overflow-x-auto"><code>const watcher = observekit.attribute(
+  document.getElementById('attr-target'),
+  ['data-state'],
+  (els) =&gt; console.log('data-state ->', els[0].dataset.state),
+);
 
-  <section id="demo-reports" class="border border-[#2a2e37] rounded-lg p-4 my-5 bg-[#161a22]">
-    <h2 class="text-[#7fd3ff] text-base mb-2">observekit.reports</h2>
-    <div class="flex gap-2 flex-wrap my-2">
-      <button id="reports-check"
-        class="bg-[#232838] border border-[#333a4d] rounded-md px-3 py-1.5 hover:bg-[#2c3346]">Check support</button>
-      <button id="reports-replay"
-        class="bg-[#232838] border border-[#ffb454] text-[#ffb454] rounded-md px-3 py-1.5 hover:bg-[#2c3346]">Replay
-        demo</button>
-    </div>
-    <p class="text-xs text-[#8a8]" id="reports-status"></p>
-    <pre class="bg-[#0b0d12] rounded-md p-2 max-h-[140px] overflow-y-auto text-[13px] mt-2 whitespace-pre-wrap"
-      id="reports-log"></pre>
-  </section>
+watcher.disconnect();</code></pre>
+        </div>
+      </section>
 
-  <section id="demo-options" class="border border-[#2a2e37] rounded-lg p-4 my-5 bg-[#161a22]">
-    <h2 class="text-[#7fd3ff] text-base mb-2">Options: debounce / once / timeout / signal</h2>
-    <div class="flex gap-2 flex-wrap my-2">
-      <button id="opt-spam"
-        class="bg-[#232838] border border-[#333a4d] rounded-md px-3 py-1.5 hover:bg-[#2c3346]">Insert 5 items fast
-        (debounce: 150ms)</button>
-      <button id="opt-once-trigger"
-        class="bg-[#232838] border border-[#333a4d] rounded-md px-3 py-1.5 hover:bg-[#2c3346]">Trigger once-watcher
-        twice</button>
-      <button id="opt-abort"
-        class="bg-[#232838] border border-[#333a4d] rounded-md px-3 py-1.5 hover:bg-[#2c3346]">Abort via signal</button>
-      <button id="opt-replay"
-        class="bg-[#232838] border border-[#ffb454] text-[#ffb454] rounded-md px-3 py-1.5 hover:bg-[#2c3346]">Replay
-        demo</button>
+      <section id="demo-children" class="border border-slate-800 rounded-lg p-5 bg-slate-900 flex flex-col">
+        <h2 class="text-accent font-semibold mb-2">observekit.children</h2>
+        <div class="flex flex-wrap gap-2 mb-2">
+          <button id="child-add"
+            class="px-3 py-1.5 rounded-md bg-slate-800 border border-slate-700 hover:bg-slate-700">Add
+            list item</button>
+          <button id="child-remove"
+            class="px-3 py-1.5 rounded-md bg-slate-800 border border-slate-700 hover:bg-slate-700">Remove list
+            item</button>
+          <button id="child-replay" class="px-3 py-1.5 rounded-md border border-warn text-warn hover:bg-warn/10">Replay
+            demo</button>
+        </div>
+        <ul class="border border-dashed border-slate-700 rounded-md p-3 min-h-[2rem] list-disc list-inside"
+          id="child-list">
+        </ul>
+        <pre class="log bg-slate-950 rounded-md p-2 mt-2 max-h-36 overflow-y-auto text-xs whitespace-pre-wrap"
+          id="child-log"></pre>
+        <div class="mt-3 pt-3 border-t border-slate-800">
+          <p class="text-slate-500 text-[11px] uppercase tracking-wide mb-1">Usage</p>
+          <pre class="code-block bg-slate-950 border border-slate-800 rounded-md p-3 text-xs overflow-x-auto"><code>const watcher = observekit.children(
+  document.getElementById('child-list'),
+  (els) =&gt; console.log('children changed:', els.length),
+);
+
+watcher.disconnect();</code></pre>
+        </div>
+      </section>
+
+      <section id="demo-text" class="border border-slate-800 rounded-lg p-5 bg-slate-900 flex flex-col">
+        <h2 class="text-accent font-semibold mb-2">observekit.text</h2>
+        <p class="text-slate-400 text-sm mb-2">
+          type below — uses <b>debounce: 300ms</b>, not throttle. debounce fits typing better: you want the
+          settled final value once typing pauses, not a callback firing every N ms mid-keystroke (that's what
+          throttle would give you, and it'd fire with half-typed words).
+        </p>
+        <div id="text-target" contenteditable="true"
+          class="border border-slate-700 rounded-md p-3 bg-slate-950 min-h-[4rem] focus:outline-none focus:ring-1 focus:ring-accent">
+          initial text</div>
+        <pre class="log bg-slate-950 rounded-md p-2 mt-2 max-h-36 overflow-y-auto text-xs whitespace-pre-wrap"
+          id="text-log"></pre>
+        <div class="mt-2">
+          <button id="text-replay" class="px-3 py-1.5 rounded-md border border-warn text-warn hover:bg-warn/10">Replay
+            demo</button>
+        </div>
+        <div class="mt-3 pt-3 border-t border-slate-800">
+          <p class="text-slate-500 text-[11px] uppercase tracking-wide mb-1">Usage</p>
+          <pre class="code-block bg-slate-950 border border-slate-800 rounded-md p-3 text-xs overflow-x-auto"><code>const watcher = observekit.text(
+  document.getElementById('text-target'),
+  (els) =&gt; console.log('settled ->', els[0].textContent),
+  { debounce: 300 },
+);
+
+watcher.disconnect();</code></pre>
+        </div>
+      </section>
+
+      <section id="demo-resize" class="border border-slate-800 rounded-lg p-5 bg-slate-900 flex flex-col">
+        <h2 class="text-accent font-semibold mb-2">observekit.resize (+ start / end)</h2>
+        <div class="flex flex-wrap gap-2 mb-2">
+          <button id="resize-toggle"
+            class="px-3 py-1.5 rounded-md bg-slate-800 border border-slate-700 hover:bg-slate-700">Toggle box
+            size</button>
+          <button id="resize-replay" class="px-3 py-1.5 rounded-md border border-warn text-warn hover:bg-warn/10">Replay
+            demo</button>
+        </div>
+        <p class="text-slate-400 text-sm mb-2">drag bottom-right corner to resize manually — watch start/end fire
+          separately
+          from the per-tick resize log</p>
+        <div class="border border-dashed border-slate-700 rounded-md p-3">
+          <div id="resize-target"
+            class="w-20 h-16 bg-slate-700 rounded-md resize overflow-auto min-w-[60px] min-h-[40px] max-w-[400px] max-h-[300px]">
+          </div>
+        </div>
+        <pre class="log bg-slate-950 rounded-md p-2 mt-2 max-h-36 overflow-y-auto text-xs whitespace-pre-wrap"
+          id="resize-log"></pre>
+        <div class="mt-3 pt-3 border-t border-slate-800">
+          <p class="text-slate-500 text-[11px] uppercase tracking-wide mb-1">Usage</p>
+          <pre class="code-block bg-slate-950 border border-slate-800 rounded-md p-3 text-xs overflow-x-auto"><code>const watcher = observekit.resize(
+  document.getElementById('resize-target'),
+  (entries) =&gt; console.log('tick size ->', entries[0].contentRect),
+  {
+    onStart: () =&gt; console.log('resize START'),
+    onEnd: (entries) =&gt; console.log('resize END', entries[0].contentRect),
+  },
+);
+
+watcher.disconnect();</code></pre>
+        </div>
+      </section>
+
+      <section id="demo-visible" class="border border-slate-800 rounded-lg p-5 bg-slate-900 flex flex-col">
+        <h2 class="text-accent font-semibold mb-2">observekit.visible (+ offset)</h2>
+        <div class="flex flex-wrap items-center gap-2 mb-2">
+          <button id="visible-scroll"
+            class="px-3 py-1.5 rounded-md bg-slate-800 border border-slate-700 hover:bg-slate-700">Scroll target into
+            view</button>
+          <label class="text-sm text-slate-400 flex items-center gap-1">offset (px):
+            <input id="visible-offset" type="number" value="100"
+              class="w-20 bg-slate-950 border border-slate-700 rounded px-1 text-slate-100" />
+          </label>
+          <button id="visible-replay"
+            class="px-3 py-1.5 rounded-md border border-warn text-warn hover:bg-warn/10">Replay
+            demo</button>
+        </div>
+        <p class="text-slate-400 text-sm mb-2">offset expands root box so "near" fires before element actually on screen
+        </p>
+        <div class="h-32 overflow-y-scroll border border-dashed border-slate-700 rounded-md p-2" id="visible-scroller">
+          <div class="h-72"></div>
+          <div id="visible-target" class="bg-purple-950 p-2 rounded-md">watched element</div>
+          <div class="h-72"></div>
+        </div>
+        <pre class="log bg-slate-950 rounded-md p-2 mt-2 max-h-36 overflow-y-auto text-xs whitespace-pre-wrap"
+          id="visible-log"></pre>
+        <div class="mt-3 pt-3 border-t border-slate-800">
+          <p class="text-slate-500 text-[11px] uppercase tracking-wide mb-1">Usage</p>
+          <pre class="code-block bg-slate-950 border border-slate-800 rounded-md p-3 text-xs overflow-x-auto"><code>const watcher = observekit.visible(
+  document.getElementById('visible-target'),
+  (entries) =&gt; console.log('isIntersecting ->', entries[0].isIntersecting),
+  { root: document.getElementById('visible-scroller'), threshold: 0.01, offset: 100 },
+);
+
+watcher.disconnect();</code></pre>
+        </div>
+      </section>
+
+      <section id="demo-performance" class="border border-slate-800 rounded-lg p-5 bg-slate-900 flex flex-col">
+        <h2 class="text-accent font-semibold mb-2">observekit.performance</h2>
+        <div class="flex flex-wrap gap-2 mb-2">
+          <button id="perf-mark"
+            class="px-3 py-1.5 rounded-md bg-slate-800 border border-slate-700 hover:bg-slate-700">Run
+            measured task</button>
+          <button id="perf-replay" class="px-3 py-1.5 rounded-md border border-warn text-warn hover:bg-warn/10">Replay
+            demo</button>
+        </div>
+        <pre class="log bg-slate-950 rounded-md p-2 mt-2 max-h-36 overflow-y-auto text-xs whitespace-pre-wrap"
+          id="perf-log"></pre>
+        <div class="mt-3 pt-3 border-t border-slate-800">
+          <p class="text-slate-500 text-[11px] uppercase tracking-wide mb-1">Usage</p>
+          <pre class="code-block bg-slate-950 border border-slate-800 rounded-md p-3 text-xs overflow-x-auto"><code>const watcher = observekit.performance(
+  ['measure'],
+  (entries) =&gt; entries.forEach((e) =&gt; console.log(e.name, e.duration)),
+);
+
+watcher.disconnect();</code></pre>
+        </div>
+      </section>
+
+      <section id="demo-reports" class="border border-slate-800 rounded-lg p-5 bg-slate-900 flex flex-col">
+        <h2 class="text-accent font-semibold mb-2">observekit.reports</h2>
+        <div class="flex flex-wrap gap-2 mb-2">
+          <button id="reports-check"
+            class="px-3 py-1.5 rounded-md bg-slate-800 border border-slate-700 hover:bg-slate-700">Check
+            support</button>
+          <button id="reports-replay"
+            class="px-3 py-1.5 rounded-md border border-warn text-warn hover:bg-warn/10">Replay
+            demo</button>
+        </div>
+        <p class="text-green-400 text-sm" id="reports-status"></p>
+        <pre class="log bg-slate-950 rounded-md p-2 mt-2 max-h-36 overflow-y-auto text-xs whitespace-pre-wrap"
+          id="reports-log"></pre>
+        <div class="mt-3 pt-3 border-t border-slate-800">
+          <p class="text-slate-500 text-[11px] uppercase tracking-wide mb-1">Usage</p>
+          <pre class="code-block bg-slate-950 border border-slate-800 rounded-md p-3 text-xs overflow-x-auto"><code>const watcher = observekit.reports(
+  ['deprecation', 'intervention'],
+  (reports) =&gt; reports.forEach((r) =&gt; console.log(r.type, r.url)),
+);
+
+watcher.disconnect();</code></pre>
+        </div>
+      </section>
+
+      <section id="demo-options"
+        class="border border-slate-800 rounded-lg p-5 bg-slate-900 flex flex-col lg:col-span-2">
+        <h2 class="text-accent font-semibold mb-2">Options: debounce / once / timeout / signal</h2>
+        <div class="flex flex-wrap gap-2 mb-2">
+          <button id="opt-spam"
+            class="px-3 py-1.5 rounded-md bg-slate-800 border border-slate-700 hover:bg-slate-700">Insert 5 items fast
+            (debounce: 150ms)</button>
+          <button id="opt-once-trigger"
+            class="px-3 py-1.5 rounded-md bg-slate-800 border border-slate-700 hover:bg-slate-700">Trigger once-watcher
+            twice</button>
+          <button id="opt-abort"
+            class="px-3 py-1.5 rounded-md bg-slate-800 border border-slate-700 hover:bg-slate-700">Abort via
+            signal</button>
+          <button id="opt-replay" class="px-3 py-1.5 rounded-md border border-warn text-warn hover:bg-warn/10">Replay
+            demo</button>
+        </div>
+        <div class="border border-dashed border-slate-700 rounded-md p-3 min-h-[2rem]" id="opt-stage"></div>
+        <pre class="log bg-slate-950 rounded-md p-2 mt-2 max-h-36 overflow-y-auto text-xs whitespace-pre-wrap"
+          id="opt-log"></pre>
+        <div class="mt-3 pt-3 border-t border-slate-800 grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div>
+            <p class="text-slate-500 text-[11px] uppercase tracking-wide mb-1">Usage — debounce</p>
+            <pre class="code-block bg-slate-950 border border-slate-800 rounded-md p-3 text-xs overflow-x-auto"><code>observekit.selector('.opt-item', (els) =&gt; {
+  console.log('batch:', els.length);
+}, { existing: false, debounce: 150 });</code></pre>
+          </div>
+          <div>
+            <p class="text-slate-500 text-[11px] uppercase tracking-wide mb-1">Usage — once</p>
+            <pre class="code-block bg-slate-950 border border-slate-800 rounded-md p-3 text-xs overflow-x-auto"><code>observekit.selector('.opt-once', (els) =&gt; {
+  console.log('fired once for', els.length);
+}, { existing: false, once: true });</code></pre>
+          </div>
+          <div>
+            <p class="text-slate-500 text-[11px] uppercase tracking-wide mb-1">Usage — signal</p>
+            <pre class="code-block bg-slate-950 border border-slate-800 rounded-md p-3 text-xs overflow-x-auto"><code>const ctrl = new AbortController();
+observekit.selector('.opt-abort', (els) =&gt; {
+  console.log('fired for', els.length);
+}, { existing: false, signal: ctrl.signal });
+
+ctrl.abort(); // stops the watcher</code></pre>
+          </div>
+        </div>
+      </section>
+
     </div>
-    <div class="border border-dashed border-[#333a4d] rounded-md p-3 my-2 min-h-[2rem]" id="opt-stage"></div>
-    <pre class="bg-[#0b0d12] rounded-md p-2 max-h-[140px] overflow-y-auto text-[13px] mt-2 whitespace-pre-wrap"
-      id="opt-log"></pre>
-  </section>
+  </div>
+
+  <style>
+    .item {
+      display: inline-block;
+      background: #1e3a2b;
+      border: 1px solid #4c8;
+      border-radius: 4px;
+      padding: .2rem .5rem;
+      margin: .2rem;
+    }
+
+    .item.removed {
+      opacity: .3;
+      text-decoration: line-through;
+    }
+
+    .code-block code {
+      color: #a5f3d0;
+      font-family: inherit;
+    }
+  </style>
 
   <script type="module">
     import { observekit } from '../dist/index.js';
@@ -185,142 +359,138 @@
     }
     function clearLog(id) { document.getElementById(id).textContent = ''; }
 
-    // one lifecycle helper for every demo below: build() sets things up and
-    // returns { disconnect() }. clicking replay tears down + rebuilds. no
-    // repeated boilerplate per section.
-    function initDemo(replayId, build) {
-      let handle;
-      function start() { handle = build(); }
-      document.getElementById(replayId).addEventListener('click', () => {
-        handle.disconnect();
-        start();
-      });
-      start();
-    }
-
     // ---------- element / selector ----------
-    let elCounter;
-    initDemo('el-replay', () => {
+    let elWatcher, elCounter;
+    function setupElement() {
       clearLog('el-log');
       $('#el-stage').empty();
       elCounter = 0;
-      return observekit.selector('.demo-item', {
+      elWatcher = observekit.selector('.demo-item', {
         add: (els) => log('el-log', `add: ${els.length} element(s)`),
         remove: (els) => log('el-log', `remove: ${els.length} element(s)`),
       }, { existing: false });
-    });
+    }
     $('#el-add').on('click', () => {
       elCounter++;
-      $(`<span class="inline-block bg-[#2b3a2f] border border-[#4c8] rounded px-2 py-0.5 m-0.5 demo-item">item ${elCounter}</span>`).appendTo('#el-stage');
+      $(`<span class="item demo-item">item ${elCounter}</span>`).appendTo('#el-stage');
     });
-    $('#el-remove').on('click', () => $('#el-stage .demo-item').last().remove());
+    $('#el-remove').on('click', () => $('#el-stage .item').last().remove());
+    $('#el-replay').on('click', () => { elWatcher.disconnect(); setupElement(); });
+    setupElement();
 
-    // ---------- attribute (click target directly) ----------
-    let attrOn = false;
-    initDemo('attr-replay', () => {
+    // ---------- element: matched by text ----------
+    let eltxtWatcher;
+    function setupElementText() {
+      clearLog('eltxt-log');
+      $('#eltxt-stage').empty();
+      eltxtWatcher = observekit.element('button', {
+        add: (els) => els.forEach((el) => {
+          log('eltxt-log', `matched: "${el.textContent.trim()}"`);
+          el.classList.add('ring-2', 'ring-accent');
+        }),
+        remove: (els) => log('eltxt-log', `removed: ${els.length} matched element(s)`),
+      }, { text: 'Archive', existing: false });
+    }
+    $('#eltxt-add-match').on('click', () => {
+      $('<button class="item px-2 py-1 rounded bg-slate-800 border border-slate-700">Archive</button>').appendTo('#eltxt-stage');
+    });
+    $('#eltxt-add-nomatch').on('click', () => {
+      $('<button class="item px-2 py-1 rounded bg-slate-800 border border-slate-700">Delete</button>').appendTo('#eltxt-stage');
+    });
+    $('#eltxt-remove').on('click', () => $('#eltxt-stage .item').last().remove());
+    $('#eltxt-replay').on('click', () => { eltxtWatcher.disconnect(); setupElementText(); });
+    setupElementText();
+
+    // ---------- attribute: click the element itself ----------
+    let attrWatcher;
+    function setupAttribute() {
       clearLog('attr-log');
-      attrOn = false;
-      $('#attr-target').removeAttr('data-state');
-      return observekit.attribute(document.getElementById('attr-target'), ['data-state'], (els) => {
+      $('#attr-target').attr('data-state', 'idle');
+      attrWatcher = observekit.attribute(document.getElementById('attr-target'), ['data-state'], (els) => {
         log('attr-log', `data-state -> ${$(els[0]).attr('data-state')}`);
       });
-    });
+    }
     $('#attr-target').on('click', function () {
-      attrOn = !attrOn;
-      $(this).attr('data-state', attrOn ? 'active' : 'idle');
+      const next = $(this).attr('data-state') === 'active' ? 'idle' : 'active';
+      $(this).attr('data-state', next);
     });
+    $('#attr-replay').on('click', () => { attrWatcher.disconnect(); setupAttribute(); });
+    setupAttribute();
 
     // ---------- children ----------
-    let childCounter;
-    initDemo('child-replay', () => {
+    let childWatcher, childCounter;
+    function setupChildren() {
       clearLog('child-log');
       $('#child-list').empty();
       childCounter = 0;
-      return observekit.children(document.getElementById('child-list'), (els) => {
+      childWatcher = observekit.children(document.getElementById('child-list'), (els) => {
         log('child-log', `children changed: ${els.length}`);
       });
-    });
+    }
     $('#child-add').on('click', () => {
       childCounter++;
       $(`<li>row ${childCounter}</li>`).appendTo('#child-list');
     });
     $('#child-remove').on('click', () => $('#child-list li').last().remove());
+    $('#child-replay').on('click', () => { childWatcher.disconnect(); setupChildren(); });
+    setupChildren();
 
-    // ---------- text (button + debounced textarea) ----------
-    let textCounter;
-    initDemo('text-replay', () => {
+    // ---------- text: contenteditable, debounced ----------
+    let textWatcher;
+    function setupText() {
       clearLog('text-log');
-      textCounter = 0;
       $('#text-target').text('initial text');
-      $('#text-input').val('');
-      return observekit.text(document.getElementById('text-target'), (els) => {
-        log('text-log', `text -> "${els[0].textContent}"`);
+      textWatcher = observekit.text(document.getElementById('text-target'), (els) => {
+        log('text-log', `settled -> "${els[0].textContent}"`);
       }, { debounce: 300 });
-    });
-    $('#text-change').on('click', () => {
-      textCounter++;
-      $('#text-target').text(`updated ${textCounter} times`);
-    });
-    $('#text-input').on('input', function () {
-      $('#text-target').text($(this).val() || '(empty)');
-    });
+    }
+    $('#text-replay').on('click', () => { textWatcher.disconnect(); setupText(); });
+    setupText();
 
-    // ---------- resize (start/end logs) ----------
-    initDemo('resize-replay', () => {
+    // ---------- resize + start/end ----------
+    let resizeWatcher;
+    function setupResize() {
       clearLog('resize-log');
-      $('#resize-target').removeClass('big').css({ width: '', height: '' });
-      let idleTimer = null;
-      const watcher = observekit.resize(document.getElementById('resize-target'), (entries) => {
+      $('#resize-target').removeClass('w-56 h-28').addClass('w-20 h-16');
+      resizeWatcher = observekit.resize(document.getElementById('resize-target'), (entries) => {
         const r = entries[0].contentRect;
-        if (!idleTimer) log('resize-log', 'resize start');
-        else clearTimeout(idleTimer);
-        log('resize-log', `size -> ${Math.round(r.width)}x${Math.round(r.height)}`);
-        idleTimer = setTimeout(() => {
-          log('resize-log', 'resize end');
-          idleTimer = null;
-        }, 400);
+        log('resize-log', `tick: size -> ${Math.round(r.width)}x${Math.round(r.height)}`);
+      }, {
+        onStart: () => log('resize-log', '>> resize START'),
+        onEnd: (entries) => {
+          const r = entries[0].contentRect;
+          log('resize-log', `<< resize END, final size ${Math.round(r.width)}x${Math.round(r.height)}`);
+        },
       });
-      return {
-        disconnect() {
-          if (idleTimer) clearTimeout(idleTimer);
-          watcher.disconnect();
-        }
-      };
-    });
-    $('#resize-toggle').on('click', () => {
-      const t = $('#resize-target');
-      const big = t.hasClass('big');
-      t.toggleClass('big');
-      t.css(big
-        ? { width: '80px', height: '60px' }
-        : { width: '220px', height: '120px' });
-    });
+    }
+    $('#resize-toggle').on('click', () => $('#resize-target').toggleClass('w-20 h-16 w-56 h-28'));
+    $('#resize-replay').on('click', () => { resizeWatcher.disconnect(); setupResize(); });
+    setupResize();
 
-    // ---------- visible (adjustable rootMargin offset) ----------
-    initDemo('visible-replay', () => {
+    // ---------- visible + offset ----------
+    let visibleWatcher;
+    function setupVisible() {
       clearLog('visible-log');
       document.getElementById('visible-scroller').scrollTop = 0;
       const offset = Number($('#visible-offset').val()) || 0;
-      log('visible-log', `watching with rootMargin: ${offset}px`);
-      return observekit.visible(document.getElementById('visible-target'), (entries) => {
-        log('visible-log', `isIntersecting -> ${entries[0].isIntersecting}`);
-      }, {
-        root: document.getElementById('visible-scroller'),
-        rootMargin: `${offset}px`,
-        threshold: 0.5
-      });
-    });
+      visibleWatcher = observekit.visible(document.getElementById('visible-target'), (entries) => {
+        log('visible-log', `isIntersecting -> ${entries[0].isIntersecting} (offset ${offset}px)`);
+      }, { root: document.getElementById('visible-scroller'), threshold: 0.01, offset });
+    }
     $('#visible-scroll').on('click', () => {
       document.getElementById('visible-target').scrollIntoView({ behavior: 'smooth', block: 'center' });
     });
+    $('#visible-replay').on('click', () => { visibleWatcher.disconnect(); setupVisible(); });
+    setupVisible();
 
     // ---------- performance ----------
-    initDemo('perf-replay', () => {
+    let perfWatcher;
+    function setupPerformance() {
       clearLog('perf-log');
-      return observekit.performance(['measure'], (entries) => {
+      perfWatcher = observekit.performance(['measure'], (entries) => {
         entries.forEach((e) => log('perf-log', `measure "${e.name}" took ${e.duration.toFixed(2)}ms`));
       });
-    });
+    }
     $('#perf-mark').on('click', () => {
       performance.mark('task-start');
       setTimeout(() => {
@@ -328,62 +498,66 @@
         performance.measure('demo-task', 'task-start', 'task-end');
       }, 50 + Math.random() * 150);
     });
+    $('#perf-replay').on('click', () => { perfWatcher.disconnect(); setupPerformance(); });
+    setupPerformance();
 
     // ---------- reports ----------
-    initDemo('reports-replay', () => {
+    let reportsWatcher;
+    function setupReports() {
       clearLog('reports-log');
       const supported = typeof ReportingObserver !== 'undefined';
       $('#reports-status').text(supported ? 'ReportingObserver supported in this browser.' : 'ReportingObserver NOT supported here — observekit.reports() no-ops safely.');
-      return observekit.reports(['deprecation', 'intervention'], (reports) => {
+      reportsWatcher = observekit.reports(['deprecation', 'intervention'], (reports) => {
         reports.forEach((r) => log('reports-log', `${r.type}: ${r.url}`));
       });
-    });
+    }
     $('#reports-check').on('click', () => log('reports-log', typeof ReportingObserver !== 'undefined' ? 'watcher active, waiting for browser-emitted reports' : 'unsupported, disconnect() is a no-op'));
+    $('#reports-replay').on('click', () => { reportsWatcher.disconnect(); setupReports(); });
+    setupReports();
 
     // ---------- options: debounce / once / timeout / signal ----------
-    let optCounter, optAbortController;
-    initDemo('opt-replay', () => {
+    let optWatcher, optOnceWatcher, optAbortController, optAbortWatcher, optCounter;
+    function setupOptions() {
       clearLog('opt-log');
       $('#opt-stage').empty();
       optCounter = 0;
 
-      const w1 = observekit.selector('.opt-item', (els) => {
+      optWatcher = observekit.selector('.opt-item', (els) => {
         log('opt-log', `debounced batch: ${els.length} item(s) in one callback`);
       }, { existing: false, debounce: 150 });
 
-      const w2 = observekit.selector('.opt-once', (els) => {
+      optOnceWatcher = observekit.selector('.opt-once', (els) => {
         log('opt-log', `once-watcher fired for ${els.length} item(s), now disconnected`);
       }, { existing: false, once: true });
 
       optAbortController = new AbortController();
-      const w3 = observekit.selector('.opt-abort', (els) => {
+      optAbortWatcher = observekit.selector('.opt-abort', (els) => {
         log('opt-log', `abort-watcher fired for ${els.length} item(s)`);
       }, { existing: false, signal: optAbortController.signal });
-
-      return {
-        disconnect() {
-          w1.disconnect();
-          w2.disconnect();
-          w3.disconnect();
-        }
-      };
-    });
+    }
     $('#opt-spam').on('click', () => {
       for (let i = 0; i < 5; i++) {
         optCounter++;
-        $(`<span class="inline-block bg-[#2b3a2f] border border-[#4c8] rounded px-2 py-0.5 m-0.5 opt-item">fast ${optCounter}</span>`).appendTo('#opt-stage');
+        $(`<span class="item opt-item">fast ${optCounter}</span>`).appendTo('#opt-stage');
       }
     });
     $('#opt-once-trigger').on('click', () => {
       optCounter++;
-      $(`<span class="inline-block bg-[#2b3a2f] border border-[#4c8] rounded px-2 py-0.5 m-0.5 opt-once">once ${optCounter}</span>`).appendTo('#opt-stage');
+      $(`<span class="item opt-once">once ${optCounter}</span>`).appendTo('#opt-stage');
     });
     $('#opt-abort').on('click', () => {
       optAbortController.abort();
       log('opt-log', 'signal aborted -> watcher disconnected');
       optCounter++;
-      $(`<span class="inline-block bg-[#2b3a2f] border border-[#4c8] rounded px-2 py-0.5 m-0.5 opt-abort opacity-30 line-through">opt-abort ${optCounter} (after abort, ignored)</span>`).appendTo('#opt-stage');
+      $(`<span class="item opt-abort removed">opt-abort ${optCounter} (after abort, ignored)</span>`).appendTo('#opt-stage');
     });
+    $('#opt-replay').on('click', () => {
+      optWatcher.disconnect();
+      optOnceWatcher.disconnect();
+      optAbortWatcher.disconnect();
+      setupOptions();
+    });
+    setupOptions();
   </script>
 </body>
 

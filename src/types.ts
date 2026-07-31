@@ -35,9 +35,23 @@ export interface ElementOptions extends BaseOptions {
 	 * attributes changes (not just on insertion). Defaults to `false`.
 	 */
 	fireOnAttributesModification?: boolean;
+	/**
+	 * Further restrict matches to elements whose textContent satisfies this
+	 * matcher. Applied on top of `selector` — scope `selector` narrowly
+	 * (e.g. `'button'`, not `'*'`) so a matching leaf and its matching
+	 * ancestor don't both fire for the same text.
+	 */
+	text?: TextMatcher;
 }
 
 export type ElementsCallback<T = Element> = (elements: T[]) => void;
+
+/**
+ * Matches an element's normalized (whitespace-collapsed, trimmed)
+ * textContent. String = exact match; RegExp = tested against the
+ * normalized text; function = custom predicate.
+ */
+export type TextMatcher = string | RegExp | ((text: string) => boolean);
 
 export interface AddRemoveCallbacks {
 	add?: ElementsCallback;

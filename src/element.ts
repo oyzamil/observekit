@@ -6,7 +6,7 @@ import type {
 } from "./types";
 
 import { registerElementWatcher } from "./mutation-registry";
-import { createBatcher, createLifecycle } from "./util";
+import { createBatcher, createLifecycle, matchesText } from "./util";
 
 function normalizeCallback(cb: ElementCallback): {
 	onAdd?: ElementsCallback;
@@ -37,6 +37,7 @@ export function element(
 
 	const watcher = {
 		selector,
+		textMatcher: options.text,
 		fireOnAttributesModification: options.fireOnAttributesModification ?? false,
 		matched: new Set<Element>(),
 		onAdd: onAdd ? (els: Element[]) => addBatcher.push(els) : undefined,
@@ -50,7 +51,11 @@ export function element(
 	const existing = options.existing ?? true;
 	if (existing && !lifecycle.disconnected()) {
 		const scanRoot = root as Element | Document;
-		const preexisting = Array.from(scanRoot.querySelectorAll(selector));
+		let preexisting = Array.from(scanRoot.querySelectorAll(selector));
+		if (options.text) {
+			const tm = options.text;
+			preexisting = preexisting.filter((el) => matchesText(el, tm));
+		}
 		if (preexisting.length) {
 			preexisting.forEach((el) => watcher.matched.add(el));
 			onAdd?.(preexisting);
