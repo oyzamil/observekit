@@ -206,6 +206,7 @@ observekit.selector('.modal', (els) => els.forEach(openModal), {
 
 ## More docs
 
+- [`docs/API.md`](docs/API.md) — using observekit.
 - [`docs/jquery.md`](docs/jquery.md) — using observekit with jQuery collections.
 - [`example/index.html`](example/index.html) — live demo of every method, each with a Replay button. Run `npm run build` then open the file (imports from `../dist/index.js`).
 
