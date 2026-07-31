@@ -24,7 +24,9 @@
 		"test": "vitest run",
 		"test:watch": "vitest",
 		"typecheck": "tsc --noEmit",
-		"prepublishOnly": "npm run build && npm run test"
+		"prepublishOnly": "bun run build && bun run test",
+		"format": "biome format --write ./src",
+		"git": "bun run ./scripts/git-helper.ts add-git"
 	},
 	"keywords": [
 		"mutation-observer",
