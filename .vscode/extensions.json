@@ -1,0 +1,16 @@
+{
+  "recommendations": [
+    "pflannery.vscode-versionlens",
+    "teabyii.ayu",
+    "jannisx11.batch-rename-extension",
+    "aaron-bond.better-comments",
+    "lebster.eval-and-replace",
+    "lokalise.i18n-ally",
+    "xabikos.javascriptsnippets",
+    "yandeu.five-server",
+    "pkief.material-icon-theme",
+    "esbenp.prettier-vscode",
+    "bradlc.vscode-tailwindcss"
+  ],
+  "unwantedRecommendations": []
+}

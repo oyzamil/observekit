@@ -1,0 +1,56 @@
+{
+	"name": "observekit",
+	"version": "0.0.1",
+	"description": "Unified, tree-shakeable wrapper over MutationObserver, ResizeObserver, IntersectionObserver, PerformanceObserver and ReportingObserver. A typed, zero-dependency replacement for arrive.js-style polling hacks.",
+	"type": "module",
+	"sideEffects": false,
+	"main": "./dist/index.cjs",
+	"module": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js",
+			"require": "./dist/index.cjs"
+		},
+		"./package.json": "./package.json"
+	},
+	"files": [
+		"dist"
+	],
+	"scripts": {
+		"build": "tsup",
+		"dev": "tsup --watch",
+		"test": "vitest run",
+		"test:watch": "vitest",
+		"typecheck": "tsc --noEmit",
+		"prepublishOnly": "npm run build && npm run test"
+	},
+	"keywords": [
+		"mutation-observer",
+		"resize-observer",
+		"intersection-observer",
+		"performance-observer",
+		"reporting-observer",
+		"dom",
+		"arrive",
+		"arrive.js",
+		"observer",
+		"browser-extension"
+	],
+	"author": "M.Muzammil <https://muzammil.work>",
+	"license": "MIT",
+	"devDependencies": {
+		"jsdom": "^25.0.0",
+		"tsup": "^8.3.0",
+		"typescript": "^5.6.0",
+		"vitest": "^2.1.0",
+		"@biomejs/biome": "^2.5.6"
+	},
+	"engines": {
+		"node": ">=18"
+	},
+	"publishConfig": {
+		"access": "public"
+	}
+}

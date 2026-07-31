@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>observekit — live demos</title>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="font-mono bg-[#0f1115] text-[#e6e6e6] p-8">
+
+  <h1 class="text-xl font-semibold mb-1">observekit — live demos</h1>
+  <p class="text-[#9aa] mt-0">Every method below is wired to a real observekit watcher. Trigger the action, watch the
+    log, hit Replay
+    to reset and re-register.</p>
+
+  <section id="demo-element" class="border border-[#2a2e37] rounded-lg p-4 my-5 bg-[#161a22]">
+    <h2 class="text-[#7fd3ff] text-base mb-2">observekit.element / selector</h2>
+    <div class="flex gap-2 flex-wrap my-2">
+      <button id="el-add" class="bg-[#232838] border border-[#333a4d] rounded-md px-3 py-1.5 hover:bg-[#2c3346]">Add
+        matching element (.demo-item)</button>
+      <button id="el-remove"
+        class="bg-[#232838] border border-[#333a4d] rounded-md px-3 py-1.5 hover:bg-[#2c3346]">Remove last</button>
+      <button id="el-replay"
+        class="bg-[#232838] border border-[#ffb454] text-[#ffb454] rounded-md px-3 py-1.5 hover:bg-[#2c3346]">Replay
+        demo</button>
+    </div>
+    <div class="border border-dashed border-[#333a4d] rounded-md p-3 my-2 min-h-[2rem]" id="el-stage"></div>
+    <pre class="bg-[#0b0d12] rounded-md p-2 max-h-[140px] overflow-y-auto text-[13px] mt-2 whitespace-pre-wrap"
+      id="el-log"></pre>
+  </section>
+
+  <section id="demo-attribute" class="border border-[#2a2e37] rounded-lg p-4 my-5 bg-[#161a22]">
+    <h2 class="text-[#7fd3ff] text-base mb-2">observekit.attribute</h2>
+    <p class="text-xs text-[#8a8] mb-1">click target below directly — watcher fires on its data-state attribute</p>
+    <div class="flex gap-2 flex-wrap my-2">
+      <button id="attr-replay"
+        class="bg-[#232838] border border-[#ffb454] text-[#ffb454] rounded-md px-3 py-1.5 hover:bg-[#2c3346]">Replay
+        demo</button>
+    </div>
+    <div class="border border-dashed border-[#333a4d] rounded-md p-3 my-2 min-h-[2rem]">
+      <div
+        class="w-20 h-[60px] flex items-center justify-center bg-[#3a2b52] rounded-md cursor-pointer select-none text-center text-sm px-2"
+        id="attr-target">click me</div>
+    </div>
+    <pre class="bg-[#0b0d12] rounded-md p-2 max-h-[140px] overflow-y-auto text-[13px] mt-2 whitespace-pre-wrap"
+      id="attr-log"></pre>
+  </section>
+
+  <section id="demo-children" class="border border-[#2a2e37] rounded-lg p-4 my-5 bg-[#161a22]">
+    <h2 class="text-[#7fd3ff] text-base mb-2">observekit.children</h2>
+    <div class="flex gap-2 flex-wrap my-2">
+      <button id="child-add" class="bg-[#232838] border border-[#333a4d] rounded-md px-3 py-1.5 hover:bg-[#2c3346]">Add
+        list item</button>
+      <button id="child-remove"
+        class="bg-[#232838] border border-[#333a4d] rounded-md px-3 py-1.5 hover:bg-[#2c3346]">Remove list item</button>
+      <button id="child-replay"
+        class="bg-[#232838] border border-[#ffb454] text-[#ffb454] rounded-md px-3 py-1.5 hover:bg-[#2c3346]">Replay
+        demo</button>
+    </div>
+    <ul class="border border-dashed border-[#333a4d] rounded-md p-3 my-2 min-h-[2rem] list-disc list-inside"
+      id="child-list"></ul>
+    <pre class="bg-[#0b0d12] rounded-md p-2 max-h-[140px] overflow-y-auto text-[13px] mt-2 whitespace-pre-wrap"
+      id="child-log"></pre>
+  </section>
+
+  <section id="demo-text" class="border border-[#2a2e37] rounded-lg p-4 my-5 bg-[#161a22]">
+    <h2 class="text-[#7fd3ff] text-base mb-2">observekit.text</h2>
+    <div class="flex gap-2 flex-wrap my-2">
+      <button id="text-change"
+        class="bg-[#232838] border border-[#333a4d] rounded-md px-3 py-1.5 hover:bg-[#2c3346]">Change text
+        content</button>
+      <button id="text-replay"
+        class="bg-[#232838] border border-[#ffb454] text-[#ffb454] rounded-md px-3 py-1.5 hover:bg-[#2c3346]">Replay
+        demo</button>
+    </div>
+    <div class="border border-dashed border-[#333a4d] bg-[#3a2b52] rounded-md p-2 my-2" id="text-target">initial text
+    </div>
+    <textarea id="text-input" rows="2" placeholder="type here — debounced, target updates after you pause"
+      class="w-full mt-2 bg-[#0b0d12] border border-[#333a4d] rounded-md p-2 text-[#e6e6e6] text-sm"></textarea>
+    <p class="text-xs text-[#8a8] mt-1">watcher uses <code>debounce: 300</code> — good fit for typing: fires once per
+      pause instead of once per keystroke.</p>
+    <pre class="bg-[#0b0d12] rounded-md p-2 max-h-[140px] overflow-y-auto text-[13px] mt-2 whitespace-pre-wrap"
+      id="text-log"></pre>
+  </section>
+
+  <section id="demo-resize" class="border border-[#2a2e37] rounded-lg p-4 my-5 bg-[#161a22]">
+    <h2 class="text-[#7fd3ff] text-base mb-2">observekit.resize</h2>
+    <div class="flex gap-2 flex-wrap my-2">
+      <button id="resize-toggle"
+        class="bg-[#232838] border border-[#333a4d] rounded-md px-3 py-1.5 hover:bg-[#2c3346]">Toggle box size</button>
+      <button id="resize-replay"
+        class="bg-[#232838] border border-[#ffb454] text-[#ffb454] rounded-md px-3 py-1.5 hover:bg-[#2c3346]">Replay
+        demo</button>
+    </div>
+    <p class="text-xs text-[#8a8]">drag bottom-right corner of box to resize manually — logs "resize start" then "resize
+      end" after 400ms idle</p>
+    <div class="border border-dashed border-[#333a4d] rounded-md p-3 my-2 min-h-[2rem]">
+      <div
+        class="w-20 h-[60px] bg-[#35405a] rounded-md transition-all duration-300 resize overflow-auto min-w-[60px] min-h-[40px] max-w-[400px] max-h-[300px]"
+        id="resize-target"></div>
+    </div>
+    <pre class="bg-[#0b0d12] rounded-md p-2 max-h-[140px] overflow-y-auto text-[13px] mt-2 whitespace-pre-wrap"
+      id="resize-log"></pre>
+  </section>
+
+  <section id="demo-visible" class="border border-[#2a2e37] rounded-lg p-4 my-5 bg-[#161a22]">
+    <h2 class="text-[#7fd3ff] text-base mb-2">observekit.visible</h2>
+    <div class="flex gap-2 flex-wrap my-2 items-center">
+      <button id="visible-scroll"
+        class="bg-[#232838] border border-[#333a4d] rounded-md px-3 py-1.5 hover:bg-[#2c3346]">Scroll target into
+        view</button>
+      <label class="text-xs text-[#8a8] flex items-center gap-1">rootMargin offset:
+        <input id="visible-offset" type="number" value="0" step="10"
+          class="w-16 bg-[#0b0d12] border border-[#333a4d] rounded px-1 text-[#e6e6e6]"> px
+      </label>
+      <button id="visible-replay"
+        class="bg-[#232838] border border-[#ffb454] text-[#ffb454] rounded-md px-3 py-1.5 hover:bg-[#2c3346]">Replay
+        demo</button>
+    </div>
+    <div class="h-[120px] overflow-y-scroll border border-dashed border-[#333a4d] p-2" id="visible-scroller">
+      <div class="h-[300px]"></div>
+      <div class="bg-[#3a2b52] p-2 rounded-md" id="visible-target">watched element</div>
+      <div class="h-[300px]"></div>
+    </div>
+    <pre class="bg-[#0b0d12] rounded-md p-2 max-h-[140px] overflow-y-auto text-[13px] mt-2 whitespace-pre-wrap"
+      id="visible-log"></pre>
+  </section>
+
+  <section id="demo-performance" class="border border-[#2a2e37] rounded-lg p-4 my-5 bg-[#161a22]">
+    <h2 class="text-[#7fd3ff] text-base mb-2">observekit.performance</h2>
+    <div class="flex gap-2 flex-wrap my-2">
+      <button id="perf-mark" class="bg-[#232838] border border-[#333a4d] rounded-md px-3 py-1.5 hover:bg-[#2c3346]">Run
+        measured task</button>
+      <button id="perf-replay"
+        class="bg-[#232838] border border-[#ffb454] text-[#ffb454] rounded-md px-3 py-1.5 hover:bg-[#2c3346]">Replay
+        demo</button>
+    </div>
+    <pre class="bg-[#0b0d12] rounded-md p-2 max-h-[140px] overflow-y-auto text-[13px] mt-2 whitespace-pre-wrap"
+      id="perf-log"></pre>
+  </section>
+
+  <section id="demo-reports" class="border border-[#2a2e37] rounded-lg p-4 my-5 bg-[#161a22]">
+    <h2 class="text-[#7fd3ff] text-base mb-2">observekit.reports</h2>
+    <div class="flex gap-2 flex-wrap my-2">
+      <button id="reports-check"
+        class="bg-[#232838] border border-[#333a4d] rounded-md px-3 py-1.5 hover:bg-[#2c3346]">Check support</button>
+      <button id="reports-replay"
+        class="bg-[#232838] border border-[#ffb454] text-[#ffb454] rounded-md px-3 py-1.5 hover:bg-[#2c3346]">Replay
+        demo</button>
+    </div>
+    <p class="text-xs text-[#8a8]" id="reports-status"></p>
+    <pre class="bg-[#0b0d12] rounded-md p-2 max-h-[140px] overflow-y-auto text-[13px] mt-2 whitespace-pre-wrap"
+      id="reports-log"></pre>
+  </section>
+
+  <section id="demo-options" class="border border-[#2a2e37] rounded-lg p-4 my-5 bg-[#161a22]">
+    <h2 class="text-[#7fd3ff] text-base mb-2">Options: debounce / once / timeout / signal</h2>
+    <div class="flex gap-2 flex-wrap my-2">
+      <button id="opt-spam"
+        class="bg-[#232838] border border-[#333a4d] rounded-md px-3 py-1.5 hover:bg-[#2c3346]">Insert 5 items fast
+        (debounce: 150ms)</button>
+      <button id="opt-once-trigger"
+        class="bg-[#232838] border border-[#333a4d] rounded-md px-3 py-1.5 hover:bg-[#2c3346]">Trigger once-watcher
+        twice</button>
+      <button id="opt-abort"
+        class="bg-[#232838] border border-[#333a4d] rounded-md px-3 py-1.5 hover:bg-[#2c3346]">Abort via signal</button>
+      <button id="opt-replay"
+        class="bg-[#232838] border border-[#ffb454] text-[#ffb454] rounded-md px-3 py-1.5 hover:bg-[#2c3346]">Replay
+        demo</button>
+    </div>
+    <div class="border border-dashed border-[#333a4d] rounded-md p-3 my-2 min-h-[2rem]" id="opt-stage"></div>
+    <pre class="bg-[#0b0d12] rounded-md p-2 max-h-[140px] overflow-y-auto text-[13px] mt-2 whitespace-pre-wrap"
+      id="opt-log"></pre>
+  </section>
+
+  <script type="module">
+    import { observekit } from '../dist/index.js';
+
+    function log(id, msg) {
+      const el = document.getElementById(id);
+      el.textContent += `[${new Date().toLocaleTimeString()}] ${msg}\n`;
+      el.scrollTop = el.scrollHeight;
+    }
+    function clearLog(id) { document.getElementById(id).textContent = ''; }
+
+    // one lifecycle helper for every demo below: build() sets things up and
+    // returns { disconnect() }. clicking replay tears down + rebuilds. no
+    // repeated boilerplate per section.
+    function initDemo(replayId, build) {
+      let handle;
+      function start() { handle = build(); }
+      document.getElementById(replayId).addEventListener('click', () => {
+        handle.disconnect();
+        start();
+      });
+      start();
+    }
+
+    // ---------- element / selector ----------
+    let elCounter;
+    initDemo('el-replay', () => {
+      clearLog('el-log');
+      $('#el-stage').empty();
+      elCounter = 0;
+      return observekit.selector('.demo-item', {
+        add: (els) => log('el-log', `add: ${els.length} element(s)`),
+        remove: (els) => log('el-log', `remove: ${els.length} element(s)`),
+      }, { existing: false });
+    });
+    $('#el-add').on('click', () => {
+      elCounter++;
+      $(`<span class="inline-block bg-[#2b3a2f] border border-[#4c8] rounded px-2 py-0.5 m-0.5 demo-item">item ${elCounter}</span>`).appendTo('#el-stage');
+    });
+    $('#el-remove').on('click', () => $('#el-stage .demo-item').last().remove());
+
+    // ---------- attribute (click target directly) ----------
+    let attrOn = false;
+    initDemo('attr-replay', () => {
+      clearLog('attr-log');
+      attrOn = false;
+      $('#attr-target').removeAttr('data-state');
+      return observekit.attribute(document.getElementById('attr-target'), ['data-state'], (els) => {
+        log('attr-log', `data-state -> ${$(els[0]).attr('data-state')}`);
+      });
+    });
+    $('#attr-target').on('click', function () {
+      attrOn = !attrOn;
+      $(this).attr('data-state', attrOn ? 'active' : 'idle');
+    });
+
+    // ---------- children ----------
+    let childCounter;
+    initDemo('child-replay', () => {
+      clearLog('child-log');
+      $('#child-list').empty();
+      childCounter = 0;
+      return observekit.children(document.getElementById('child-list'), (els) => {
+        log('child-log', `children changed: ${els.length}`);
+      });
+    });
+    $('#child-add').on('click', () => {
+      childCounter++;
+      $(`<li>row ${childCounter}</li>`).appendTo('#child-list');
+    });
+    $('#child-remove').on('click', () => $('#child-list li').last().remove());
+
+    // ---------- text (button + debounced textarea) ----------
+    let textCounter;
+    initDemo('text-replay', () => {
+      clearLog('text-log');
+      textCounter = 0;
+      $('#text-target').text('initial text');
+      $('#text-input').val('');
+      return observekit.text(document.getElementById('text-target'), (els) => {
+        log('text-log', `text -> "${els[0].textContent}"`);
+      }, { debounce: 300 });
+    });
+    $('#text-change').on('click', () => {
+      textCounter++;
+      $('#text-target').text(`updated ${textCounter} times`);
+    });
+    $('#text-input').on('input', function () {
+      $('#text-target').text($(this).val() || '(empty)');
+    });
+
+    // ---------- resize (start/end logs) ----------
+    initDemo('resize-replay', () => {
+      clearLog('resize-log');
+      $('#resize-target').removeClass('big').css({ width: '', height: '' });
+      let idleTimer = null;
+      const watcher = observekit.resize(document.getElementById('resize-target'), (entries) => {
+        const r = entries[0].contentRect;
+        if (!idleTimer) log('resize-log', 'resize start');
+        else clearTimeout(idleTimer);
+        log('resize-log', `size -> ${Math.round(r.width)}x${Math.round(r.height)}`);
+        idleTimer = setTimeout(() => {
+          log('resize-log', 'resize end');
+          idleTimer = null;
+        }, 400);
+      });
+      return {
+        disconnect() {
+          if (idleTimer) clearTimeout(idleTimer);
+          watcher.disconnect();
+        }
+      };
+    });
+    $('#resize-toggle').on('click', () => {
+      const t = $('#resize-target');
+      const big = t.hasClass('big');
+      t.toggleClass('big');
+      t.css(big
+        ? { width: '80px', height: '60px' }
+        : { width: '220px', height: '120px' });
+    });
+
+    // ---------- visible (adjustable rootMargin offset) ----------
+    initDemo('visible-replay', () => {
+      clearLog('visible-log');
+      document.getElementById('visible-scroller').scrollTop = 0;
+      const offset = Number($('#visible-offset').val()) || 0;
+      log('visible-log', `watching with rootMargin: ${offset}px`);
+      return observekit.visible(document.getElementById('visible-target'), (entries) => {
+        log('visible-log', `isIntersecting -> ${entries[0].isIntersecting}`);
+      }, {
+        root: document.getElementById('visible-scroller'),
+        rootMargin: `${offset}px`,
+        threshold: 0.5
+      });
+    });
+    $('#visible-scroll').on('click', () => {
+      document.getElementById('visible-target').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+
+    // ---------- performance ----------
+    initDemo('perf-replay', () => {
+      clearLog('perf-log');
+      return observekit.performance(['measure'], (entries) => {
+        entries.forEach((e) => log('perf-log', `measure "${e.name}" took ${e.duration.toFixed(2)}ms`));
+      });
+    });
+    $('#perf-mark').on('click', () => {
+      performance.mark('task-start');
+      setTimeout(() => {
+        performance.mark('task-end');
+        performance.measure('demo-task', 'task-start', 'task-end');
+      }, 50 + Math.random() * 150);
+    });
+
+    // ---------- reports ----------
+    initDemo('reports-replay', () => {
+      clearLog('reports-log');
+      const supported = typeof ReportingObserver !== 'undefined';
+      $('#reports-status').text(supported ? 'ReportingObserver supported in this browser.' : 'ReportingObserver NOT supported here — observekit.reports() no-ops safely.');
+      return observekit.reports(['deprecation', 'intervention'], (reports) => {
+        reports.forEach((r) => log('reports-log', `${r.type}: ${r.url}`));
+      });
+    });
+    $('#reports-check').on('click', () => log('reports-log', typeof ReportingObserver !== 'undefined' ? 'watcher active, waiting for browser-emitted reports' : 'unsupported, disconnect() is a no-op'));
+
+    // ---------- options: debounce / once / timeout / signal ----------
+    let optCounter, optAbortController;
+    initDemo('opt-replay', () => {
+      clearLog('opt-log');
+      $('#opt-stage').empty();
+      optCounter = 0;
+
+      const w1 = observekit.selector('.opt-item', (els) => {
+        log('opt-log', `debounced batch: ${els.length} item(s) in one callback`);
+      }, { existing: false, debounce: 150 });
+
+      const w2 = observekit.selector('.opt-once', (els) => {
+        log('opt-log', `once-watcher fired for ${els.length} item(s), now disconnected`);
+      }, { existing: false, once: true });
+
+      optAbortController = new AbortController();
+      const w3 = observekit.selector('.opt-abort', (els) => {
+        log('opt-log', `abort-watcher fired for ${els.length} item(s)`);
+      }, { existing: false, signal: optAbortController.signal });
+
+      return {
+        disconnect() {
+          w1.disconnect();
+          w2.disconnect();
+          w3.disconnect();
+        }
+      };
+    });
+    $('#opt-spam').on('click', () => {
+      for (let i = 0; i < 5; i++) {
+        optCounter++;
+        $(`<span class="inline-block bg-[#2b3a2f] border border-[#4c8] rounded px-2 py-0.5 m-0.5 opt-item">fast ${optCounter}</span>`).appendTo('#opt-stage');
+      }
+    });
+    $('#opt-once-trigger').on('click', () => {
+      optCounter++;
+      $(`<span class="inline-block bg-[#2b3a2f] border border-[#4c8] rounded px-2 py-0.5 m-0.5 opt-once">once ${optCounter}</span>`).appendTo('#opt-stage');
+    });
+    $('#opt-abort').on('click', () => {
+      optAbortController.abort();
+      log('opt-log', 'signal aborted -> watcher disconnected');
+      optCounter++;
+      $(`<span class="inline-block bg-[#2b3a2f] border border-[#4c8] rounded px-2 py-0.5 m-0.5 opt-abort opacity-30 line-through">opt-abort ${optCounter} (after abort, ignored)</span>`).appendTo('#opt-stage');
+    });
+  </script>
+</body>
+
+</html>
