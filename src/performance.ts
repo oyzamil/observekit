@@ -38,7 +38,17 @@ export function performance_(
 	);
 	const lifecycle = createLifecycle(options, () => observer.disconnect());
 
-	observer.observe({ entryTypes, buffered: options.buffered ?? true });
+	// PerformanceObserver.observe() rejects `buffered` when passed alongside
+	// `entryTypes` (throws). `buffered` is only accepted with the single-type
+	// `type` form, so only use it when there's exactly one entry type.
+	if (entryTypes.length === 1) {
+		observer.observe({
+			type: entryTypes[0]!,
+			buffered: options.buffered ?? true,
+		});
+	} else {
+		observer.observe({ entryTypes });
+	}
 
 	return {
 		disconnect() {

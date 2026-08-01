@@ -289,6 +289,7 @@ observekit.selector('.modal', (els) => els.forEach(openModal), {
 - [`docs/API.md`](docs/API.md) — using observekit.
 - [`docs/jquery.md`](docs/jquery.md) — using observekit with jQuery collections.
 - [`example/index.html`](example/index.html) — live demo of every method, each with a Replay button.
+- [For More](https://muzammil.work) — Visit Docs page for latest updates.
 
 ## Non-goals
 

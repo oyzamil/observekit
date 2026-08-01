@@ -54,7 +54,8 @@ watcher.disconnect();</code></pre>
         <h2 class="text-accent font-semibold mb-2">observekit.element — matched by text</h2>
         <p class="text-slate-400 text-sm mb-2">watcher is scoped to <code>button</code> +
           <code>{ text: 'Archive' }</code>
-          — only a button whose text is exactly "Archive" fires, the "Delete" button never does</p>
+          — only a button whose text is exactly "Archive" fires, the "Delete" button never does
+        </p>
         <div class="flex flex-wrap gap-2 mb-2">
           <button id="eltxt-add-match"
             class="px-3 py-1.5 rounded-md bg-slate-800 border border-slate-700 hover:bg-slate-700">Add
@@ -349,8 +350,9 @@ ctrl.abort(); // stops the watcher</code></pre>
     }
   </style>
 
+  <script type="text/javascript" src="../dist/index.min.js"></script>
   <script type="module">
-    import { observekit } from '../dist/index.js';
+    // import { observekit } from '../dist/index.esm.js';
 
     function log(id, msg) {
       const el = document.getElementById(id);
