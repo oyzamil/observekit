@@ -18,7 +18,9 @@ const shared: Options = {
 export default defineConfig([
 	{
 		...shared,
-		entry: ["src/index.ts"],
+		entry: {
+			observekit: "src/index.ts",
+		},
 		format: ["esm", "cjs"],
 		dts: true,
 		clean: true,
@@ -29,7 +31,9 @@ export default defineConfig([
 	},
 	{
 		...shared,
-		entry: ["src/index.ts"],
+		entry: {
+			observekit: "src/index.ts",
+		},
 		format: ["esm", "cjs"],
 		dts: false,
 		clean: false,
@@ -40,7 +44,9 @@ export default defineConfig([
 	},
 	{
 		...shared,
-		entry: { index: "src/browser.ts" },
+		entry: {
+			observekit: "src/browser.ts",
+		},
 		format: ["iife"],
 		dts: false,
 		clean: false,
@@ -51,7 +57,9 @@ export default defineConfig([
 	},
 	{
 		...shared,
-		entry: { index: "src/browser.ts" },
+		entry: {
+			observekit: "src/browser.ts",
+		},
 		format: ["iife"],
 		dts: false,
 		clean: false,
