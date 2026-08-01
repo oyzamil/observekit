@@ -3,6 +3,7 @@
 	"version": "0.0.4",
 	"description": "Unified, tree-shakeable wrapper over MutationObserver, ResizeObserver, IntersectionObserver, PerformanceObserver and ReportingObserver. A typed, zero-dependency replacement for arrive.js-style polling hacks.",
 	"type": "module",
+	"homepage": "https://github.com/oyzamil/observekit",
 	"sideEffects": false,
 	"main": "./dist/observekit.cjs.js",
 	"module": "./dist/observekit.esm.js",
@@ -42,7 +43,7 @@
 		"observer",
 		"browser-extension"
 	],
-	"author": "M.Muzammil <https://muzammil.work>",
+	"author": "M.Muzammil <qazi.web@gmail.com> (https://muzammil.work/)",
 	"license": "MIT",
 	"devDependencies": {
 		"@biomejs/biome": "^2.5.6",
