@@ -1,4 +1,5 @@
-/*! observekit v0.0.4 - es | M.Muzammil <https://muzammil.work/> | MIT License */
+/*! observekit v0.0.4 - cjs | M.Muzammil <https://muzammil.work/> | MIT License */
+Object.defineProperties(exports, { __esModule: { value: true }, [Symbol.toStringTag]: { value: 'Module' } });
 //#region src/util.ts
 /** Collapse whitespace and trim, so markup formatting doesn't affect matches. */
 function normalizeText(s) {
@@ -699,4 +700,6 @@ const observekit = Object.assign(observekitFn, {
 });
 
 //#endregion
-export { observekit as default, observekit, observekitFn };
+exports.default = observekit;
+exports.observekit = observekit;
+exports.observekitFn = observekitFn;

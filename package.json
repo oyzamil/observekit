@@ -22,12 +22,13 @@
 		"dist"
 	],
 	"scripts": {
-		"build": "tsup",
-		"dev": "tsup --watch",
+		"docs": "typedoc",
+		"build": "tsdown",
+		"dev": "tsdown --watch",
 		"test": "vitest run",
 		"test:watch": "vitest",
 		"typecheck": "tsc --noEmit",
-		"prepublishOnly": "bun run build && bun run test",
+		"prepublishOnly": "bun run build && bun run test && bun run docs",
 		"format": "biome format --write ./src",
 		"git": "bun run ./scripts/git-helper.ts add-git"
 	},
@@ -49,8 +50,9 @@
 		"@biomejs/biome": "^2.5.6",
 		"@types/node": "^26.1.2",
 		"jsdom": "^25.0.0",
-		"tsup": "^8.3.0",
-		"typescript": "^5.6.0",
+		"typedoc": "^0.28.20",
+		"typedoc-plugin-markdown": "^4.12.0",
+		"typescript": "6.0.3",
 		"vitest": "^2.1.0"
 	},
 	"engines": {
@@ -58,5 +60,9 @@
 	},
 	"publishConfig": {
 		"access": "public"
+	},
+	"dependencies": {
+		"tsdown": "^0.22.14",
+		"unrun": "^0.3.1"
 	}
 }

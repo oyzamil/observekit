@@ -1,3 +1,7 @@
+**observekit**
+
+***
+
 # observekit
 
 Unified, typed, tree-shakeable wrapper over the browser's native Observer
@@ -285,7 +289,7 @@ observekit.selector('.modal', (els) => els.forEach(openModal), {
   registration/deregistration cost and zero re-`observe()` churn.
 
 ## More docs
-- [`demo/index.html`](demo/index.html) — live demo of every method, each with a Replay button.
+- [`demo/index.html`](_media/index.html) — live demo of every method, each with a Replay button.
 - [For More](https://muzammil.work) — Visit Docs page for latest updates.
 
 ## Non-goals

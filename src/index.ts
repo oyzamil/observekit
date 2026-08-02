@@ -9,8 +9,17 @@ import { reports } from "./reporting";
 import { resize } from "./resize";
 import { text } from "./text";
 
-export type { VisibleOptions } from "./intersection";
-export type { PerformanceOptions } from "./performance";
+export type { attribute } from "./attribute";
+export type { children } from "./children";
+export type { element, selector } from "./element";
+export type { VisibleOptions, visible } from "./intersection";
+export type {
+	PerformanceOptions,
+	performance_ as performance,
+} from "./performance";
+export type { Report, reports } from "./reporting";
+export type { ResizeOptions, resize } from "./resize";
+export type { text } from "./text";
 export type {
 	AddRemoveCallbacks,
 	BaseOptions,
@@ -42,7 +51,7 @@ export interface ObserveKitConfig {
  * @param config - Setup functions to invoke for each requested observer kind.
  * @returns A `Disposer` whose `disconnect()` is a no-op.
  */
-function observekitFn(config: ObserveKitConfig): Disposer {
+export function observekitFn(config: ObserveKitConfig): Disposer {
 	config.mutation?.();
 	config.resize?.();
 	config.intersection?.();

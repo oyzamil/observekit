@@ -11,7 +11,7 @@ interface ReportingObserverOptions {
 }
 
 /** A single report delivered by `ReportingObserver` (deprecation, intervention, crash, etc.). */
-interface Report {
+export interface Report {
 	type: string;
 	url: string;
 	body: unknown;
